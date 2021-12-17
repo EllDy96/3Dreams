@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/EllDy96/3Dreams#readme",
   "dependencies": {
-    "aframe": "^1.2.0"
+    "aframe": "^1.2.0",
+    "browserify-css": "^0.15.0",
+    "envify": "^4.1.0"
   }
 }
