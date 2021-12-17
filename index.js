@@ -1,3 +1,3 @@
-let aframe = require('aframe');
+let aframe = require("aframe");
 
-console.log('test afadsfasdf');
+console.log("tedfjadfjdsjst afadsfasdf");
