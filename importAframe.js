@@ -1,0 +1,1 @@
+let aframe = require('aframe');

@@ -1,3 +1,8 @@
-let aframe = require("aframe");
+let scene = document.querySelector('a-scene');
 
-console.log("tedfjadfjdsjst afadsfasdf");
+console.log(scene);
+
+let env = document.createElement('a-entity');
+env.setAttribute('environment', 'preset: volcano');
+
+scene.appendChild(env);
