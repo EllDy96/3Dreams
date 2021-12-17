@@ -1,0 +1,22 @@
+{
+  "name": "3dreams",
+  "version": "1.0.0",
+  "description": "CPAC Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EllDy96/3Dreams.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EllDy96/3Dreams/issues"
+  },
+  "homepage": "https://github.com/EllDy96/3Dreams#readme",
+  "dependencies": {
+    "aframe": "^1.2.0"
+  }
+}
