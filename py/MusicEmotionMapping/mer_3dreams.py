@@ -1,6 +1,5 @@
 import pyaudio
 import wave
-import numpy as np
 import wavio
 import sys
 import librosa
@@ -9,54 +8,76 @@ import tensorflow as tf
 from tensorflow import keras
 from keras.models import load_model
 import struct
-import matplotlib.pyplot as plt
-
+import numpy as np
 import math
 from MoodMapping import get_color_for_point
 from MoodMapping import create_2d_color_map
 import cv2
-from scipy.spatial import KDTree
-import webcolors 
- 
+import matplotlib.pyplot as plt
+from pythonosc import udp_client
+
+
+#Set OSC port
+ip = "127.0.0.1"
+port = 57121
+
+client = udp_client.SimpleUDPClient(ip, port)
+
+
+
 class AudioFile:
     chunk = 22050
     SR = 44100
-    # choose the number of 500 ms audio cuncks on which apply the avarag
-    avg_blocks = 3
+    # choose the number of 500 ms audio cuncks on which apply the avarage
+    avg_blocks = 6
 
 
     def __init__(self, file):
         
         """ ---------- Create the color map ----------  """ 
 
-        colors = {"coral": [255,127,80],
-                    "pink": [255, 192, 203],
-                    "orange": [255, 165, 0],
-                    "blue": [0, 0, 205],
-                    "green": [0, 205, 0],
-                    "red": [205, 0, 0],
-                    "yellow": [204, 204, 0]}
-        angry_pos = [-0.8, 0.5]
-        fear_pos = [-0.3, 0.8]
-        happy_pos = [0.6, 0.6]
-        calm_pos = [0.4, -0.5]
-        sad_pos = [-0.6, -0.4]
+        colors = {  "red": [200, 0, 0],
+                            "orange": [255, 120, 20],
+                            "coral": [255,127,80], 
+                            "pink": [255, 192, 203],
+                            "yellow": [204, 204, 0], 
+                            "lightGreen": [0, 225, 0],
+                            "green": [0, 190, 0],
+                            "darkGreen": [0, 100, 0],
+                            "purple":[85, 0, 100],
+                            "lightBlue": [0, 0, 205],
+                            "blue": [0, 0, 150],
+                            "darkBlue": [0, 0, 139]} 
+        angry_pos = [-0.8, 0.5]#red
+        fear_pos = [-0.3, 0.8]#coral
+        allert_pos = [-0.1, 0.9]#orange
+        happy_pos = [0.8, 0.1]#yellow 
+        serene_pos = [0.5, -0.5]#lightgreen
+        relaxed_pos=[0.7,-0.6]#green
+        calm_pos = [0.3,-0.7]#DarkGreen
+        sad_pos = [-0.9, -0.1] #purple
+        depressed = [-0.6, -0.5] #lighBlue
+        depressed_2 = [-0.3, -0.5]#lightBlue
+        bored = [-0.8, -0.7] #blue 
+        fatigue= [-0.3,-0.8]#darkBlue
 
-        bgr = create_2d_color_map([angry_pos, fear_pos, happy_pos,
-                                    calm_pos, sad_pos],
-                                    [colors["red"],  colors["yellow"],
-                                    colors["orange"], colors["green"],
-                                    colors["blue"]], 200, 200)
+ 
+        bgr = create_2d_color_map([angry_pos, fear_pos, allert_pos,  happy_pos, serene_pos,relaxed_pos,
+                                    calm_pos, sad_pos, depressed,depressed_2, bored, fatigue], 
+                                    [colors["red"],  colors["coral"],colors["orange"], colors["yellow"], 
+                                    colors["lightGreen"], 
+                                    colors["green"],colors["darkGreen"],colors["purple"],colors["lightBlue"], 
+                                    colors["lightBlue"],colors["blue"], colors["darkBlue"]], 200, 200)
 
+ 
         cv2.imshow('Signal', bgr)
         ch = cv2.waitKey(10000)
         
-        
-        
-        
-        
+
         """ ---------- Audio Analysis and Color Mapping ---------- """ 
-    
+        
+        
+        
         #Load the audio and resampling it at 44100
         
         audio, nativeSampleRate = librosa.load(file, sr=None)
@@ -119,9 +140,9 @@ class AudioFile:
         
         print("Number of Avagarage Values : ", self.numAvgValues, "\nNumber of chuncks processed : ", self.numChunks, "\nNumber of chuncks of each avarage: ",  self.avg_blocks, "\n")
            
-        """ ---------- PROVA NORMALIZZAZIONE ---------- """
+        """ ---------- Scaling VA Values ---------- """
         
-        scaling_factor = 1.5
+        scaling_factor = 2.5
         val = []
         ar = []
         
@@ -144,7 +165,7 @@ class AudioFile:
         
         for i in range(self.numAvgValues):
             self.va[i] = [ar[i], val[i]]
-            #print("Arousal and Valence : ", self.va[i])  
+            
             
                     
         
@@ -154,25 +175,23 @@ class AudioFile:
         
         
         for i in range(self.numAvgValues):
-            #print(i)
-            #print("Arousal avarage :", self.va[i][0])
-            #print("Valence avarage :", self.va[i][1])
             
             arousal = self.va[i][0]
             valence = self.va[i][1]
             
-            color =  get_color_for_point([arousal, valence], [angry_pos, fear_pos, happy_pos,
-                            calm_pos, sad_pos], [colors["red"],  colors["yellow"],
-                            colors["orange"], colors["green"],
-                            colors["blue"]])
+            color =  get_color_for_point([valence, arousal], [angry_pos, fear_pos, allert_pos,  happy_pos, serene_pos,relaxed_pos,
+                                    calm_pos, sad_pos, depressed,depressed_2, bored, fatigue], 
+                                    [colors["red"],  colors["coral"],colors["orange"], colors["yellow"], 
+                                    colors["lightGreen"], 
+                                    colors["green"],colors["darkGreen"],colors["purple"],colors["lightBlue"], 
+                                    colors["lightBlue"],colors["blue"], colors["darkBlue"]])
+            
+            
+            color = [round(color[0]), round(color[1]), round(color[2])]
             
             
             self.colorMapped.append(color)
             
-        
-            
-        #print("number of chuncks processed : ", self.numChunks)
-        #print("number of VA avarage values : ", self.numAvgValues, "\n \n")
 
         
         
@@ -197,8 +216,6 @@ class AudioFile:
         
         cnt = 1
         i = 0
-        valence_avg = 0
-        arousal_avg = 0 
         
         #Send an OSC message every 'self.avg_blocks' chuncks
         
@@ -213,26 +230,21 @@ class AudioFile:
                 print("Corresponding RGB color : ", self.colorMapped[i], "\n\n")
                 
                 
-                #print("Corresponding hex value of the color", webcolors.rgb_to_hex((round(self.colorMapped[i][0]),round(self.colorMapped[i][1]),round(self.colorMapped[i][2]))))
-                #Showing the color into an image, it will block for a bit the script then keep going
-                plt.imshow([[(round(self.colorMapped[i][0]),round(self.colorMapped[i][1]),round(self.colorMapped[i][2]))]])
+                client.send_message("/RGB", self.colorMapped[i]) 
+                               
+                """
+                plt.imshow([[(self.colorMapped[i][0],self.colorMapped[i][1],self.colorMapped[i][2])]])
                 
                 plt.show(block=False)
-                plt.pause(2)  
+                plt.pause(0.1)  
                 plt.close()
+                """
                 
-                # plt.pause(0.1)
-                # plt.close()
-                #actual_name, closest_name = get_colour_name(self.colorMapped[i])
-                #print("Corresponding  color name : ",closest_name)
-                #print(i)
                 i = i + 1
                     
             
-            #print(cnt)
             cnt = cnt + 1
             
-              
             self.stream.write(data)
             data = self.wf.readframes(self.chunk)
     
@@ -245,45 +257,10 @@ class AudioFile:
         
 
 
-def closest_colour(requested_colour):
-    min_colours = {}
-    for key, name in webcolors.css3_hex_to_names.items():
-        r_c, g_c, b_c = webcolors.hex_to_rgb(key)
-        rd = (r_c - requested_colour[0]) ** 2
-        gd = (g_c - requested_colour[1]) ** 2
-        bd = (b_c - requested_colour[2]) ** 2
-        min_colours[(rd + gd + bd)] = name
-    return min_colours[min(min_colours.keys())]
-
-def get_colour_name(requested_colour):
-    try:
-        closest_name = actual_name = webcolors.rgb_to_name(requested_colour)
-    except ValueError:
-        closest_name = closest_colour(requested_colour)
-        actual_name = None
-    return actual_name, closest_name
-
-
-
-
-
-# def convert_rgb_to_names(rgb_tuple):
-    
-#     # a dictionary of all the hex and their respective names in css3
-#     css3_db = css3_hex_to_names
-#     names = []
-#     rgb_values = []
-#     for color_hex, color_name in css3_db.items():
-#         names.append(color_name)
-#         rgb_values.append(hex_to_rgb(color_hex))
-    
-#     kdt_db = KDTree(rgb_values)
-#     distance, index = kdt_db.query(rgb_tuple)
-#     return f'closest match: {names[index]}'
 
 
 #Set the path of the audio file
-audio_path="wavTracks/Slipknot - Psychosocial.wav"
+audio_path="Mix.wav"
           
 
 # Usage example for pyaudio

@@ -1,13 +1,13 @@
-let header = document.getElementById('msg');
+let header = document.getElementById("msg");
 
 //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
 let oscPort = new osc.WebSocketPort({
-  url: 'wss://192.x.x.x:3000',
+  url: "wss://192.168.1.187:3000",
 });
 
-oscPort.on('message', function (msg) {
-  header.innerHTML = msg.args[0];
-  //console.log('message', msg);
+oscPort.on("message", function (msg) {
+  // header.innerHTML = msg.args[0];
+  console.log("message", msg);
 });
 
 oscPort.open();
