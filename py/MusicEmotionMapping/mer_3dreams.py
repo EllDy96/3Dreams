@@ -30,7 +30,7 @@ class AudioFile:
     SR = 44100
     # choose the number of 500 ms audio cuncks on which apply the avarage
     avg_blocks = 6
-
+    TESTING= False #set that to True if you want to dynamically see the output color for each avg_blocks
 
     def __init__(self, file):
         
@@ -67,10 +67,10 @@ class AudioFile:
                                     [colors["red"],  colors["coral"],colors["orange"], colors["yellow"], 
                                     colors["lightGreen"], 
                                     colors["green"],colors["darkGreen"],colors["purple"],colors["lightBlue"], 
-                                    colors["lightBlue"],colors["blue"], colors["darkBlue"]], 200, 200)
+                                    colors["lightBlue"],colors["blue"], colors["darkBlue"]], 400, 400)
 
  
-        cv2.imshow('Signal', bgr)
+        cv2.imshow('VA_ColorMAp', bgr)
         ch = cv2.waitKey(10000)
         
 
@@ -88,7 +88,7 @@ class AudioFile:
         
         #Load the model
 
-        pred_model = load_model("./best_model.hdf5", compile=False)
+        pred_model = load_model("py/MusicEmotionMapping/best_model.hdf5", compile=False)
         
         #Stream the data 
 
@@ -231,14 +231,13 @@ class AudioFile:
                 
                 
                 client.send_message("/RGB", self.colorMapped[i]) 
-                               
-                """
-                plt.imshow([[(self.colorMapped[i][0],self.colorMapped[i][1],self.colorMapped[i][2])]])
-                
-                plt.show(block=False)
-                plt.pause(0.1)  
-                plt.close()
-                """
+
+                #Testing the color with a real time plot                
+                if (self.TESTING):
+                    plt.imshow([[(self.colorMapped[i][0],self.colorMapped[i][1],self.colorMapped[i][2])]])
+                    plt.ion()
+                    plt.show()
+                    plt.pause(0.001)  
                 
                 i = i + 1
                     
@@ -260,7 +259,7 @@ class AudioFile:
 
 
 #Set the path of the audio file
-audio_path="Mix.wav"
+audio_path="py\MusicEmotionMapping\Mix.wav"
           
 
 # Usage example for pyaudio
