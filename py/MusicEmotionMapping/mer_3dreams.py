@@ -29,8 +29,8 @@ class AudioFile:
     chunk = 22050
     SR = 44100
     # choose the number of 500 ms audio cuncks on which apply the avarage
-    avg_blocks = 6
-    TESTING= False #set that to True if you want to dynamically see the output color for each avg_blocks
+    avg_blocks = 8
+    TESTING= False #set that to True if you want to dynamically see the output color for each avg_blocks from this script, but remamber to fix that to False at the testing-end 
 
     def __init__(self, file):
         
@@ -56,21 +56,21 @@ class AudioFile:
         relaxed_pos=[0.7,-0.6]#green
         calm_pos = [0.3,-0.7]#DarkGreen
         sad_pos = [-0.9, -0.1] #purple
-        depressed = [-0.6, -0.5] #lighBlue
-        depressed_2 = [-0.3, -0.5]#lightBlue
-        bored = [-0.8, -0.7] #blue 
-        fatigue= [-0.3,-0.8]#darkBlue
+        depressed_pos = [-0.6, -0.5] #lighBlue
+        depressed_pos_2 = [-0.3, -0.5]#lightBlue
+        bored_pos = [-0.8, -0.7] #blue 
+        fatigue_pos= [-0.3,-0.8]#darkBlue
 
  
         bgr = create_2d_color_map([angry_pos, fear_pos, allert_pos,  happy_pos, serene_pos,relaxed_pos,
-                                    calm_pos, sad_pos, depressed,depressed_2, bored, fatigue], 
+                                    calm_pos, sad_pos, depressed_pos,depressed_pos_2, bored_pos, fatigue_pos], 
                                     [colors["red"],  colors["coral"],colors["orange"], colors["yellow"], 
                                     colors["lightGreen"], 
                                     colors["green"],colors["darkGreen"],colors["purple"],colors["lightBlue"], 
                                     colors["lightBlue"],colors["blue"], colors["darkBlue"]], 400, 400)
 
  
-        cv2.imshow('VA_ColorMAp', bgr)
+        cv2.imshow('VA_ColorMap', bgr)
         ch = cv2.waitKey(10000)
         
 
@@ -142,7 +142,8 @@ class AudioFile:
            
         """ ---------- Scaling VA Values ---------- """
         
-        scaling_factor = 2.5
+        scaling_factor_val = 1.
+        scaling_factor_ar = 2.7
         val = []
         ar = []
         
@@ -154,8 +155,8 @@ class AudioFile:
         val = np.array(val)
         ar = np.array(ar)
         
-        val = np.multiply(val, scaling_factor)
-        ar = np.multiply(ar, scaling_factor)       
+        val = np.multiply(val, scaling_factor_val)
+        ar = np.multiply(ar, scaling_factor_ar)       
         
         val = np.clip(val, -1, 1)
         ar = np.clip(ar, -1, 1)
@@ -180,7 +181,7 @@ class AudioFile:
             valence = self.va[i][1]
             
             color =  get_color_for_point([valence, arousal], [angry_pos, fear_pos, allert_pos,  happy_pos, serene_pos,relaxed_pos,
-                                    calm_pos, sad_pos, depressed,depressed_2, bored, fatigue], 
+                                    calm_pos, sad_pos, depressed_pos,depressed_pos_2, bored_pos, fatigue_pos], 
                                     [colors["red"],  colors["coral"],colors["orange"], colors["yellow"], 
                                     colors["lightGreen"], 
                                     colors["green"],colors["darkGreen"],colors["purple"],colors["lightBlue"], 
@@ -229,7 +230,7 @@ class AudioFile:
                 print("Valence avarage num  ", i, " : ", self.va[i][1])
                 print("Corresponding RGB color : ", self.colorMapped[i], "\n\n")
                 
-                
+                #sending the OSC messagge
                 client.send_message("/RGB", self.colorMapped[i]) 
 
                 #Testing the color with a real time plot                
@@ -259,7 +260,7 @@ class AudioFile:
 
 
 #Set the path of the audio file
-audio_path="py\MusicEmotionMapping\Mix.wav"
+audio_path="py/MusicEmotionMapping/DemoMix.wav"
           
 
 # Usage example for pyaudio
