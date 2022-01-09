@@ -29,8 +29,8 @@ class AudioFile:
     chunk = 22050
     SR = 44100
     # choose the number of 500 ms audio cuncks on which apply the avarage
-    avg_blocks = 8
-    TESTING= False #set that to True if you want to dynamically see the output color for each avg_blocks from this script, but remamber to fix that to False at the testing-end 
+    avg_blocks = 6
+    TESTING= True #set that to True if you want to dynamically see the output color for each avg_blocks from this script, but remamber to fix that to False at the testing-end 
 
     def __init__(self, file):
         
@@ -142,8 +142,8 @@ class AudioFile:
            
         """ ---------- Scaling VA Values ---------- """
         
-        scaling_factor_val = 1.
-        scaling_factor_ar = 2.7
+        scaling_factor_val = 1
+        scaling_factor_ar = 2
         val = []
         ar = []
         
