@@ -15,9 +15,25 @@
         <a-asset-item id="env" src="env.gltf"></a-asset-item>
       </a-assets>
 
+
+    <!--SKY-->
+    <a-sky color = "#06101a"></a-sky>
+
     <!-- <a-camera position="-5.614 5.275 2.921"></a-camera> -->
+
+
+    <!--AMBIENT LIGHT-->
+    <a-entity light = "type :ambient;
+    color: #BBB"></a-entity>
+
+    <!--DIRECTIONAL LIGHT-->
+    <a-entity id= "dirLight" light = "type :directional;
+    color: #ffffff; intensity: 0.3; 
+    castShadow: true" position = "-0.5 1 1"></a-entity>
+
     <a-entity position="5.614 -3.8 -2.921" gltf-model="#env"></a-entity>
 
     <script src="socket.js"></script>
   </body>
 </html>
+ 
