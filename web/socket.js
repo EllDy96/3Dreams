@@ -1,6 +1,7 @@
 //HTML OBJ
 let light = document.getElementsByClassName("primaryLight");
 let secondarylight = document.getElementsByClassName("secondaryLight");
+let scene = document.getElementById("scene");
 
 //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
 let oscPort = new osc.WebSocketPort({
@@ -55,6 +56,12 @@ function colorOnMsg(rgb) {
     secondarylight[j].setAttribute("animation", {
       property: "light.color",
       to: compHex,
+      dur: 500,
+      easing: "linear",
+    });
+    scene.setAttribute("animation", {
+      property: "fog.color",
+      to: hexC,
       dur: 500,
       easing: "linear",
     });

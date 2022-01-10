@@ -9,7 +9,7 @@
     <title>3Dreams</title>
   </head>
   <body>
-    <a-scene>
+    <a-scene id="scene" fog="type: exponential; density: 0.005; color: #AAb; far: 100; near: 0">
       <a-assets>
         <a-asset-item id="env" src="env2.gltf"></a-asset-item>
       </a-assets>
@@ -22,7 +22,8 @@
       <a-camera position="0 1.6 0"></a-camera>
     </a-entity>
     
-
+   
+  
 
     <!--AMBIENT LIGHT-->
     <a-entity light = "type :ambient;
@@ -42,7 +43,7 @@
     <a-entity class="secondaryLight" position="41 25 -3" rotation="-78.64 90 0" light="type: spot; angle: 13; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 2; penumbra: 1; shadowBias: 0.22" animation="property: light.color; to: #003779; dur: 500; easing: linear"></a-entity>
     
     <!--a-entity class="secondaryLight" position="-33 39 -23" rotation="-78.64 90 0" light="type: spot; angle: 20; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22" animation="property: light.color; to: #003779; dur: 500; easing: linear"></a-entity-->
-    <a-entity class="secondaryLight" position="-83.05074 9.41597 -45.57914" rotation="-78.64 90 0" light="type: point; angle: 15.43; color: rgba(0,55,121,1); groundColor: #000000; distance: 1000; intensity: 0.5; penumbra: 1; shadowBias: 0.22; decay: 4.82" animation="property: light.color; to: #003779; dur: 500; easing: linear"></a-entity>
+    <a-entity class="secondaryLight" position="0 30 0" rotation="-78.64 90 0" light="type: point; angle: 15.43; color: rgba(0,55,121,1); groundColor: #000000; distance: 1000; intensity: 1.5; penumbra: 1; shadowBias: 0.22; decay: 1" animation="property: light.color; to: #003779; dur: 500; easing: linear"></a-entity>
 
     <a-entity position="5.614 -3.8 -2.921" gltf-model="#env"></a-entity>
 
