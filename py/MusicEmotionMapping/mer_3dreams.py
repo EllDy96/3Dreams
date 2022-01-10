@@ -52,7 +52,7 @@ class AudioFile:
         fear_pos = [-0.3, 0.8]#coral
         allert_pos = [-0.1, 0.9]#orange
         happy_pos = [0.8, 0.1]#yellow 
-        serene_pos = [0.5, -0.5]#lightgreen
+        serene_pos = [0.2, -0.5]#lightgreen
         relaxed_pos=[0.7,-0.6]#green
         calm_pos = [0.3,-0.7]#DarkGreen
         sad_pos = [-0.9, -0.1] #purple
@@ -142,7 +142,7 @@ class AudioFile:
            
         """ ---------- Scaling VA Values ---------- """
         
-        scaling_factor_val = 1
+        scaling_factor_val = 1.3\
         scaling_factor_ar = 2
         val = []
         ar = []
