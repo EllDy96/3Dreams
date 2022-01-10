@@ -6,18 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="/node_modules/osc/dist/osc-browser.min.js"></script>
-
     <title>3Dreams</title>
   </head>
   <body>
     <a-scene>
       <a-assets>
-        <a-asset-item id="env" src="env.gltf"></a-asset-item>
+        <a-asset-item id="env" src="env2.gltf"></a-asset-item>
       </a-assets>
 
-    <!-- <a-camera position="-5.614 5.275 2.921"></a-camera> -->
+
+    <!--SKY-->
+    <a-sky color = "#06101a"></a-sky>
+
+    <a-entity rotation="0 169 0">
+      <a-camera position="0 1.6 0"></a-camera>
+    </a-entity>
+    
+
+
+    <!--AMBIENT LIGHT-->
+    <a-entity light = "type :ambient;
+    color: #BBB"></a-entity>
+
+    <!--DIRECTIONAL LIGHT-->
+    <a-entity id= "dirLight" light = "type :directional;
+    color: #fc0303; intensity: 0.3; 
+    castShadow: true" position = "-0.5 1 1"></a-entity>
+
+    <!-- <a-entity id="spotLight" position="11 3 1" rotation="0 90 0" light="type: spot; angle: 45"></a-entity> -->
+    <!-- <a-entity id="spotLight" position="11.24678 3.82837 -0.30366" rotation="-19.59 90 0" light="type: spot; angle: 15.56; color: #ff9d00; groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22" animation="property: light.color; to: #ffcd83; dur: 500; easing: linear"></a-entity> -->
+    <a-entity id="spotLight" position="15 20.05016 29.66657" rotation="-78.64 90 0" light="type: spot; angle: 20; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22" animation="property: light.color; to: #003779; dur: 500; easing: linear"></a-entity>
+    
     <a-entity position="5.614 -3.8 -2.921" gltf-model="#env"></a-entity>
 
     <script src="socket.js"></script>
   </body>
 </html>
+ 

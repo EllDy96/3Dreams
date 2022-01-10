@@ -142,7 +142,7 @@ class AudioFile:
            
         """ ---------- Scaling VA Values ---------- """
         
-        scaling_factor_val = 1.3\
+        scaling_factor_val = 1.3
         scaling_factor_ar = 2
         val = []
         ar = []
@@ -234,11 +234,11 @@ class AudioFile:
                 client.send_message("/RGB", self.colorMapped[i]) 
 
                 #Testing the color with a real time plot                
-                if (self.TESTING):
+                """ if (self.TESTING):
                     plt.imshow([[(self.colorMapped[i][0],self.colorMapped[i][1],self.colorMapped[i][2])]])
                     plt.ion()
                     plt.show()
-                    plt.pause(0.001)  
+                    plt.pause(0.001)  """ 
                 
                 i = i + 1
                     
