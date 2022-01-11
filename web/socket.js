@@ -6,7 +6,11 @@ let scene = document.getElementById('scene');
 
 //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
 let oscPort = new osc.WebSocketPort({
+<<<<<<< HEAD
+  url: "wss://192.168.1.187:3000",
+=======
   url: 'wss://192.168.1.192:3000',
+>>>>>>> e59c72c80826e14fd51f36a49c30732a7fa291f1
 });
 
 oscPort.on('message', function (msg) {

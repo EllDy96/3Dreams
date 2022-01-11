@@ -15,6 +15,7 @@ from MoodMapping import create_2d_color_map
 import cv2
 import matplotlib.pyplot as plt
 from pythonosc import udp_client
+from pyAudioAnalysis import ShortTermFeatures
 
 
 #Set OSC port
@@ -30,7 +31,7 @@ class AudioFile:
     SR = 44100
     # choose the number of 500 ms audio cuncks on which apply the avarage
     avg_blocks = 6
-    TESTING= True #set that to True if you want to dynamically see the output color for each avg_blocks from this script, but remamber to fix that to False at the testing-end 
+    TESTING= False #boolean value for plotting colours in real time (used fo testing)
 
     def __init__(self, file):
         
@@ -52,7 +53,7 @@ class AudioFile:
         fear_pos = [-0.3, 0.8]#coral
         allert_pos = [-0.1, 0.9]#orange
         happy_pos = [0.8, 0.1]#yellow 
-        serene_pos = [0.2, -0.5]#lightgreen
+        serene_pos = [0.4, -0.5]#lightgreen
         relaxed_pos=[0.7,-0.6]#green
         calm_pos = [0.3,-0.7]#DarkGreen
         sad_pos = [-0.9, -0.1] #purple
@@ -99,10 +100,23 @@ class AudioFile:
 
         self.numChunks = 1
 
+        #Valence-arousal vector
         valence_avg = 0
         arousal_avg = 0
         
         self.va = []
+        
+        #BPM Vector
+        self.bpm = []
+        tempo = 0
+        
+        #Low-level Features Vectors
+        self.energy = []
+        energy_avg = 0
+        
+        self.entropy = []
+        entropy_avg = 0
+        
 
         #Predict the VA values for each chunk
         
@@ -111,26 +125,55 @@ class AudioFile:
             buff = np.array(np.zeros(22050))
             buff[0:y.shape[0]] = y[:]
             buff = np.expand_dims(buff, axis=0)  
-                   
+            
+            #bpm computation
+            onset_env = librosa.onset.onset_strength(y, sr=self.SR)
+            tempo += librosa.beat.tempo(onset_envelope=onset_env, sr=self.SR)
+            
+            #low-level features computation (F[2-8] are relevant fo us)
+            F, f_names = ShortTermFeatures.feature_extraction(y, self.SR, 0.050*self.SR, 0.025*self.SR)
+            
+            energy_avg += sum(F[1]) / F.shape[1]
+            entropy_avg += sum(F[2]) / F.shape[1]
+            
+            """
+            print(F.shape[1])
+            print(F.shape[1])
+            print(sum(F[2]))
+            print(f_names[2])
+            """
+
             #Valence and Arousal computation
             valence_avg += (pred_model.predict(buff)[0])[1]
             arousal_avg += (pred_model.predict(buff)[0])[0]
             
-            #print("Arousal and Valence   ", (pred_model.predict(buff)[0])[1], (pred_model.predict(buff)[0])[0])
-
             #Store the VA avarage values  
             if(self.numChunks%self.avg_blocks == 0):
 
+                #Valence and Arousal 
                 valence_avg = valence_avg/self.avg_blocks
                 arousal_avg = arousal_avg/self.avg_blocks
-                
-                #print("\n\nAVARAGE -> Arousal and valence  ", arousal_avg, valence_avg, "\n\n")
-                
-                
+
                 self.va.append([arousal_avg, valence_avg])
                     
                 valence_avg = 0
                 arousal_avg = 0
+                
+                #BPM Computation
+                tempo = (tempo/2)/self.avg_blocks
+                self.bpm.append(tempo)
+                tempo = 0
+                
+                #Energy Computation
+                energy_avg = energy_avg/self.avg_blocks
+                self.energy.append(energy_avg*10)
+                energy_avg = 0
+                
+                #Energy Computation
+                entropy_avg = entropy_avg/self.avg_blocks
+                self.entropy.append(entropy_avg)
+                entropy_avg = 0
+        
     
             self.numChunks = self.numChunks + 1
         
@@ -142,7 +185,7 @@ class AudioFile:
            
         """ ---------- Scaling VA Values ---------- """
         
-        scaling_factor_val = 1.3
+        scaling_factor_val = 1.5
         scaling_factor_ar = 2
         val = []
         ar = []
@@ -228,17 +271,26 @@ class AudioFile:
                 #Send OSC message with the RGB values    
                 print("Arousal avarage num  ", i, " : ",  self.va[i][0])
                 print("Valence avarage num  ", i, " : ", self.va[i][1])
+                print("BPM num  ", i, " : ", self.bpm[i])
+                print("Energy num  ", i, " : ", self.energy[i])
+                print("Entropy num  ", i, " : ", self.entropy[i])
                 print("Corresponding RGB color : ", self.colorMapped[i], "\n\n")
                 
+                
+                client.send_message("/RGB", self.colorMapped[i])
+                
+                """
                 #sending the OSC messagge
-                client.send_message("/RGB", self.colorMapped[i]) 
+                client.send_message("/ENERGY", self.energy[i])
+                client.send_message("/ENTROPY", self.energy[i])
+                """ 
 
                 #Testing the color with a real time plot                
-                """ if (self.TESTING):
+                if (self.TESTING):
                     plt.imshow([[(self.colorMapped[i][0],self.colorMapped[i][1],self.colorMapped[i][2])]])
                     plt.ion()
                     plt.show()
-                    plt.pause(0.001)  """ 
+                    plt.pause(0.001)   
                 
                 i = i + 1
                     

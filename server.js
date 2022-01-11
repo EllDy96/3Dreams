@@ -55,8 +55,13 @@ const sslServer = https.createServer(
 );
 
 //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
+<<<<<<< HEAD
+sslServer.listen(3000, "192.168.1.187", () => {
+  console.log("secure server on port 3000");
+=======
 sslServer.listen(3000, '192.168.1.192', () => {
   console.log('secure server on port 3000');
+>>>>>>> e59c72c80826e14fd51f36a49c30732a7fa291f1
 });
 
 let wss = new WebSocket.Server({
