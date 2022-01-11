@@ -1,6 +1,7 @@
 //HTML OBJ
 let light = document.getElementsByClassName('primaryLight');
 let secondarylight = document.getElementsByClassName('secondaryLight');
+let sky = document.getElementById('sky');
 let scene = document.getElementById('scene');
 
 //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
@@ -65,6 +66,12 @@ function colorOnMsg(rgb) {
       dur: 500,
       easing: 'linear',
     });
+    // sky.setAttribute("animation", {
+    //   property: "color",
+    //   to: compHex,
+    //   dur: 500,
+    //   easing: "linear",
+    // });
   }
   //light.setAttribute('light', 'color', hexC);
 }
