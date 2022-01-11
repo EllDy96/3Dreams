@@ -26,6 +26,7 @@ class Application {
     this.simpleRenderer = new SimpleRenderer({
       boidsController: this.boidsController,
     });
+
     this.simpleRenderer.init();
 
     // create worker planner to run the simulation in WebWorker thread.
@@ -76,4 +77,6 @@ class Application {
 }
 
 // create the application when the document is ready
-document.addEventListener('DOMContentLoaded', new Application().init());
+document.querySelector('a-scene').addEventListener('loaded', function () {
+  document.addEventListener('DOMContentLoaded', new Application().init());
+});
