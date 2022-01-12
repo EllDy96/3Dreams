@@ -59,37 +59,59 @@ function componentToHex(c) {
   return hex.length == 1 ? "0" + hex : hex;
 }
 
+// function hexToRgbA(hex) {
+//   var c;
+//   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+//     c = hex.substring(1).split("");
+//     if (c.length == 3) {
+//       c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+//     }
+//     c = "0x" + c.join("");
+//     return (
+//       "rgba(" + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(",") + ",1)"
+//     );
+//   }
+//   throw new Error("Bad Hex");
+// }
+
 function colorOnMsg(rgb) {
   let hexC = rgbToHex(rgb[0], rgb[1], rgb[2]);
   let compHex = getComplementaryColor(hexC);
+  // let rgba = hexToRgbA(hexC);
+  // let compRgba = hexToRgbA(compHex);
+
   console.log("hex", hexC);
   console.log("complementary", compHex);
+
   scene.setAttribute("animation", {
     property: "fog.color",
     to: hexC,
     dur: 500,
     easing: "linear",
   });
+
   for (let i = 0; i < light.length; i++) {
-    light[i].setAttribute("animation", {
-      property: "light.color",
-      to: hexC,
-      dur: 500,
-      easing: "linear",
-    });
+    light[i].object3D.el.getAttribute("light").color = hexC;
+
+    // light[i].setAttribute("animation", {
+    //   property: "light.color",
+    //   to: hexC,
+    //   dur: 500,
+    //   easing: "linear",
+    // });
   }
   for (let j = 0; j < secondarylight.length; j++) {
-    secondarylight[j].setAttribute("animation", {
-      property: "light.color",
-      to: compHex,
-      dur: 500,
-      easing: "linear",
-    });
+    secondarylight[j].object3D.el.getAttribute("light").color = compHex;
+    // secondarylight[j].setAttribute("animation", {
+    //   property: "light.color",
+    //   to: compHex,
+    //   dur: 500,
+    //   easing: "linear",
+    //});
   }
 
   console.log(secondarylight[0].getAttribute("light").color);
   console.log(light[0].getAttribute("light").color);
-  //light.setAttribute('light', 'color', hexC);
 }
 
 const getComplementaryColor = (color = "") => {
