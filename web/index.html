@@ -42,7 +42,7 @@
         <a-entity
           class="primaryLight"
           light="type :directional;
-    color: #fc0303; intensity: 0.3; 
+    color: #fc0303; intensity: 0.5; 
     castShadow: true"
           position="-0.5 1 1"
         ></a-entity>
@@ -51,60 +51,64 @@
           class="primaryLight"
           position="18 27 -83"
           rotation="0 90 0"
-          light="type: point; angle: 15.43; color: #fc0303; distance: 1000; intensity: 5"
+          light="type: point; angle: 15.43; color: #fc0303; distance: 1000; intensity: 3"
           animation="property: light.color; to: #003779; dur: 500; easing: linear"
         ></a-entity>
 
         <!-- <a-entity id="spotLight" position="11 3 1" rotation="0 90 0" light="type: spot; angle: 45"></a-entity> -->
         <!-- <a-entity id="spotLight" position="11.24678 3.82837 -0.30366" rotation="-19.59 90 0" light="type: spot; angle: 15.56; color: #ff9d00; groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22" animation="property: light.color; to: #ffcd83; dur: 500; easing: linear"></a-entity> -->
 
-        <a-entity
+        
+
+      <a-entity
           class="secondaryLight"
           position="15 20.05016 29.66657"
           rotation="-78.64 90 0"
           light="type: spot; angle: 20; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22"
           animation="property: light.color; to: #003779; dur: 500; easing: linear"
-        ></a-entity>
+        >
+      </a-entity>
         <a-entity
           class="secondaryLight"
           position="-25 27.7 38"
           rotation="-78.64 90 0"
           light="type: spot; angle: 20; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22"
           animation="property: light.color; to: #003779; dur: 500; easing: linear"
-        ></a-entity>
+        ></a-animation></a-entity>
         <a-entity
           class="secondaryLight"
           position="51 27.7 -34"
           rotation="-78.64 90 0"
-          light="type: spot; angle: 20; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22"
           animation="property: light.color; to: #003779; dur: 500; easing: linear"
+          light="type: spot; angle: 20; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22"
         ></a-entity>
         <a-entity
           class="secondaryLight"
           position="-19 27.7 -28"
           rotation="-78.64 90 0"
-          light="type: spot; angle: 20; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22"
           animation="property: light.color; to: #003779; dur: 500; easing: linear"
+          light="type: spot; angle: 20; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22"
         ></a-entity>
         <a-entity
           class="secondaryLight"
           position="41 25 -3"
           rotation="-78.64 90 0"
-          light="type: spot; angle: 13; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 2; penumbra: 1; shadowBias: 0.22"
           animation="property: light.color; to: #003779; dur: 500; easing: linear"
+          light="type: spot; angle: 13; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 2; penumbra: 1; shadowBias: 0.22"
         ></a-entity>
 
         <!--a-entity class="secondaryLight" position="-33 39 -23" rotation="-78.64 90 0" light="type: spot; angle: 20; color: rgba(94,34,37,1); groundColor: #000000; distance: 1000; intensity: 6.11; penumbra: 1; shadowBias: 0.22" animation="property: light.color; to: #003779; dur: 500; easing: linear"></a-entity-->
         <a-entity
           class="secondaryLight"
-          position="0 30 0"
+          position="0 40 0"
           rotation="-78.64 90 0"
-          light="type: point; angle: 15.43; color: rgba(0,55,121,1); groundColor: #000000; distance: 1000; intensity: 1.7; penumbra: 1; shadowBias: 0.22; decay: 1"
           animation="property: light.color; to: #003779; dur: 500; easing: linear"
+          light="type: point; angle: 15.43; color: rgba(0,55,121,1); groundColor: #000000; distance: 1000; intensity: 1.2; penumbra: 1; shadowBias: 0.22; decay: 1"
         ></a-entity>
 
         <a-entity position="5.614 -3.8 -2.921" gltf-model="#env"></a-entity>
       </a-entity>
+    </a-scene>
 
     <script src="socket.js"></script>
     <script src="./main.js" type="module"></script>

@@ -1,13 +1,13 @@
-const express = require('express');
-const https = require('https');
-const path = require('path');
-const fs = require('fs');
+const express = require("express");
+const https = require("https");
+const path = require("path");
+const fs = require("fs");
 
-const WebSocket = require('ws');
-const osc = require('osc');
+const WebSocket = require("ws");
+const osc = require("osc");
 
 let getIPAddresses = function () {
-  const os = require('os'),
+  const os = require("os"),
     interfaces = os.networkInterfaces(),
     ipAddresses = [];
 
@@ -15,7 +15,7 @@ let getIPAddresses = function () {
     let addresses = interfaces[deviceName];
     for (let i = 0; i < addresses.length; i++) {
       let addressInfo = addresses[i];
-      if (addressInfo.family === 'IPv4' && !addressInfo.internal) {
+      if (addressInfo.family === "IPv4" && !addressInfo.internal) {
         ipAddresses.push(addressInfo.address);
       }
     }
@@ -26,15 +26,15 @@ let getIPAddresses = function () {
 
 // Bind to a UDP socket to listen for incoming OSC events.
 let udpPort = new osc.UDPPort({
-  localAddress: '0.0.0.0',
+  localAddress: "0.0.0.0",
   localPort: 57121,
 });
 
-udpPort.on('ready', function () {
+udpPort.on("ready", function () {
   let ipAddresses = getIPAddresses();
-  console.log('Listening for OSC over UDP.');
+  console.log("Listening for OSC over UDP.");
   ipAddresses.forEach(function (address) {
-    console.log(' Host:', address + ', Port:', udpPort.options.localPort);
+    console.log(" Host:", address + ", Port:", udpPort.options.localPort);
   });
 });
 
@@ -43,33 +43,28 @@ udpPort.open();
 //Setting up https web server
 const app = express();
 
-let appResources = __dirname + '/web';
-app.use('/', express.static(appResources));
+let appResources = __dirname + "/web";
+app.use("/", express.static(appResources));
 
 const sslServer = https.createServer(
   {
-    key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
-    cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
+    key: fs.readFileSync(path.join(__dirname, "cert", "key.pem")),
+    cert: fs.readFileSync(path.join(__dirname, "cert", "cert.pem")),
   },
   app
 );
 
 //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
-<<<<<<< HEAD
-sslServer.listen(3000, "192.168.1.187", () => {
+sslServer.listen(3000, "192.168.1.208", () => {
   console.log("secure server on port 3000");
-=======
-sslServer.listen(3000, '192.168.1.192', () => {
-  console.log('secure server on port 3000');
->>>>>>> e59c72c80826e14fd51f36a49c30732a7fa291f1
 });
 
 let wss = new WebSocket.Server({
   server: sslServer,
 });
 
-wss.on('connection', function (socket) {
-  console.log('A Web Socket connection has been established!');
+wss.on("connection", function (socket) {
+  console.log("A Web Socket connection has been established!");
   let socketPort = new osc.WebSocketPort({
     socket: socket,
   });

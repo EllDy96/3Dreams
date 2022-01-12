@@ -277,13 +277,15 @@ class AudioFile:
                 print("Corresponding RGB color : ", self.colorMapped[i], "\n\n")
                 
                 
+             
+               
                 client.send_message("/RGB", self.colorMapped[i])
                 
-                """
-                #sending the OSC messagge
+                   #sending the OSC messagge
                 client.send_message("/ENERGY", self.energy[i])
-                client.send_message("/ENTROPY", self.energy[i])
-                """ 
+                client.send_message("/ENTROPY", self.entropy[i])
+              
+               
 
                 #Testing the color with a real time plot                
                 if (self.TESTING):
