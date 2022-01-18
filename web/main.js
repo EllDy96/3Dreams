@@ -1,7 +1,7 @@
-import BoidsController from './common/BoidsController.js';
-import SimpleRenderer from './common/SimpleRenderer.js';
-import ControlHelper from './common/ControlHelper.js';
-import BoidsWorkerPlanner from './common/BoidsWorkerPlanner.js';
+import BoidsController from '../common/BoidsController.js';
+import SimpleRenderer from '../common/SimpleRenderer.js';
+import ControlHelper from '../common/ControlHelper.js';
+import BoidsWorkerPlanner from '../common/BoidsWorkerPlanner.js';
 
 class Application {
   constructor() {
@@ -25,8 +25,8 @@ class Application {
     // create renderer and pass boidsController to render entities
     this.simpleRenderer = new SimpleRenderer({
       boidsController: this.boidsController,
+      flockEntityCount: this.flockEntityCount,
     });
-
     this.simpleRenderer.init();
 
     // create worker planner to run the simulation in WebWorker thread.
@@ -50,10 +50,24 @@ class Application {
     this.controlHelper.addObstacles(this.obstacleEntityCount);
 
     // request the first animation frame
-    window.requestAnimationFrame(this.render.bind(this));
+    /* window.requestAnimationFrame(this.render.bind(this)); */
+    setInterval(() => {
+      /* console.log('test'); */
+      // call statBegin() to measure time that is spend in BoidsController
+      this.controlHelper.statBegin();
+
+      // if the iterate is not requested, make a new iteration reques
+      if (!this.iterateRequested) {
+        this.workerPlanner.requestIterate();
+        this.iterateRequested = true;
+      }
+
+      // update screen by rendering
+      this.simpleRenderer.render();
+    });
   }
 
-  render() {
+  /* render() {
     window.requestAnimationFrame(this.render.bind(this));
 
     // call statBegin() to measure time that is spend in BoidsController
@@ -67,7 +81,7 @@ class Application {
 
     // update screen by rendering
     this.simpleRenderer.render();
-  }
+  } */
 
   onWorkerUpdate() {
     // call statEnd() to finalize measuring time

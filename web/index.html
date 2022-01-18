@@ -7,6 +7,8 @@
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="/node_modules/osc/dist/osc-browser.min.js"></script>
 
+    <script src="myBox.js"></script>
+
     <!-- BOIDS 3D -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"
@@ -106,11 +108,16 @@
           light="type: point; angle: 15.43; color: rgba(0,55,121,1); groundColor: #000000; distance: 1000; intensity: 1.2; penumbra: 1; shadowBias: 0.22; decay: 1"
         ></a-entity>
 
+        <a-entity id="boids" scale="0.01 0.01 0.01" position="-9.66 0 -9"></a-entity>
+        <a-sphere id="sfera" color="yellow" radius="0.1" position="1.661 1.319 3.663" >
+        </a-sphere>
+
         <a-entity position="5.614 -3.8 -2.921" gltf-model="#env"></a-entity>
       </a-entity>
     </a-scene>
 
     <script src="socket.js"></script>
-    <!--script src="./main.js" type="module"></script-->
+    <script src="./main.js" type="module"></script>
+    <!-- <script src="./test.js"></script> -->
   </body>
 </html>

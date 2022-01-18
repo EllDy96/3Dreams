@@ -3,9 +3,9 @@
  * SimpleRenderer helps visualizing the entities in the BoidsController and controls the camera.
  */
 export default class SimpleRenderer {
-  constructor({ boidsController, scene }) {
+  constructor({ boidsController, flockEntityCount }) {
     this.boidsController = boidsController;
-    this.scene = scene;
+    this.flockEntityCount = flockEntityCount;
     this.isDragging = false;
     this.mouseX = 0;
     this.mouseY = 0;
@@ -15,21 +15,32 @@ export default class SimpleRenderer {
     this.cameraMax = Math.max(b[0], b[1], b[2]);
     this.cameraRadius = (this.cameraMax * 2) / 3;
     this.lockOn = false;
+    this.boids = [];
   }
 
   init() {
-    let sceneObj = document.getElementById('scene');
+    /* BOIDS */
+    let env = document.getElementById('boids');
 
-    this.camera = sceneObj.camera;
-    /* this.camera = new THREE.PerspectiveCamera(
+    for (let i = 0; i < this.flockEntityCount; i++) {
+      let boid = document.createElement('a-sphere');
+      boid.setAttribute('color', 'black');
+      boid.setAttribute('radius', 5);
+      this.boids.push(boid);
+      env.appendChild(boid);
+    }
+
+    /* LEGACY */
+    this.camera = new THREE.PerspectiveCamera(
       70,
       window.innerWidth / window.innerHeight,
       0.01,
       100000
     );
-    this.camera.position.z = 0; */
+    this.camera.position.z = 0;
 
-    this.scene = sceneObj.object3D;
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(0xffffff);
 
     this.entityGeometry = new THREE.BoxGeometry(5, 5, 15);
     this.obstacleGeometry = new THREE.SphereGeometry(50, 15, 15);
@@ -50,11 +61,43 @@ export default class SimpleRenderer {
     line.position.z = b[2] / 2;
     this.scene.add(line);
 
-    this.renderer = sceneObj.renderer;
-    /* this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(this.renderer.domElement); */
+    document.body.appendChild(this.renderer.domElement);
 
+    this.renderer.domElement.addEventListener(
+      'mousedown',
+      this.onMouseDown.bind(this)
+    );
+    this.renderer.domElement.addEventListener(
+      'mouseup',
+      this.onMouseUp.bind(this)
+    );
+    this.renderer.domElement.addEventListener(
+      'mousemove',
+      this.onMouseMove.bind(this)
+    );
+    this.renderer.domElement.addEventListener(
+      'wheel',
+      this.onMouseWheel.bind(this)
+    );
+    this.renderer.domElement.addEventListener(
+      'touchstart',
+      this.touchStart.bind(this),
+      false
+    );
+    this.renderer.domElement.addEventListener(
+      'touchmove',
+      this.touchMove.bind(this),
+      false
+    );
+    this.renderer.domElement.addEventListener(
+      'touchend',
+      this.touchEnd.bind(this),
+      false
+    );
+
+    this.updateCamera();
     this.render();
   }
 
@@ -105,14 +148,98 @@ export default class SimpleRenderer {
     this.isDragging = false;
   }
 
+  touchMove(e) {
+    if (!this.isDragging) {
+      return;
+    }
+
+    e.preventDefault();
+
+    const t = e.changedTouches[0];
+
+    const dx = t.pageX - this.mouseX;
+    const dy = t.pageY - this.mouseY;
+
+    this.mouseX = t.pageX;
+    this.mouseY = t.pageY;
+
+    this.degX += dx;
+    if (this.degX > 360) this.degX = 0;
+    if (this.degX < 0) this.degX = 360;
+
+    this.degY += dy / 3;
+    this.degY = Math.max(0.1, this.degY);
+    this.degY = Math.min(179.9, this.degY);
+
+    this.updateCamera();
+  }
+
   onMouseDown(e) {
     this.isDragging = true;
     this.mouseX = e.offsetX;
     this.mouseY = e.offsetY;
   }
 
+  onMouseMove(e) {
+    if (!this.isDragging) {
+      return;
+    }
+
+    const dx = e.offsetX - this.mouseX;
+    const dy = e.offsetY - this.mouseY;
+
+    this.mouseX = e.offsetX;
+    this.mouseY = e.offsetY;
+
+    this.degX += dx;
+    if (this.degX > 360) this.degX = 0;
+    if (this.degX < 0) this.degX = 360;
+
+    this.degY += dy / 3;
+    this.degY = Math.max(0.1, this.degY);
+    this.degY = Math.min(179.9, this.degY);
+
+    this.updateCamera();
+  }
+
   onMouseUp(e) {
     this.isDragging = false;
+  }
+
+  onMouseWheel(e) {
+    e.preventDefault();
+    this.cameraRadius += e.deltaY * -1;
+    this.cameraRadius = Math.max(1, this.cameraRadius);
+    this.cameraRadius = Math.min(this.cameraMax, this.cameraRadius);
+    this.updateCamera();
+  }
+
+  updateCamera() {
+    let mx = 0,
+      my = 0,
+      mz = 0;
+    const entities = this.boidsController.getFlockEntities();
+    if (this.lockOn && entities.length > 0) {
+      const mesh = entities[0].mesh;
+      mx = mesh.position.x;
+      my = mesh.position.y;
+      mz = mesh.position.z;
+    } else {
+      const b = this.boidsController.getBoundary();
+      mx = b[0] / 2;
+      my = b[1] / 2;
+      mz = b[2] / 2;
+    }
+
+    const degXPI = (this.degX * Math.PI) / 180;
+    const degYPI = (this.degY * Math.PI) / 180;
+    this.camera.position.x =
+      mx + Math.sin(degXPI) * Math.sin(degYPI) * this.cameraRadius;
+    this.camera.position.z =
+      mz + Math.cos(degXPI) * Math.sin(degYPI) * this.cameraRadius;
+    this.camera.position.y = my + Math.cos(degYPI) * this.cameraRadius;
+
+    this.camera.lookAt(mx, my, mz);
   }
 
   render() {
@@ -145,6 +272,12 @@ export default class SimpleRenderer {
         mesh.position.y + mesh.localVelocity.y,
         mesh.position.z + mesh.localVelocity.z
       );
+
+      // BOIDS
+      /*  this.boids[i].setAttribute('position', `${x} ${y} ${z}`); */
+      this.boids[i].object3D.position.x = mesh.position.x;
+      this.boids[i].object3D.position.y = mesh.position.y;
+      this.boids[i].object3D.position.z = mesh.position.z;
     });
 
     const obstacles = this.boidsController.getObstacleEntities();
@@ -164,6 +297,10 @@ export default class SimpleRenderer {
       mesh.position.z = z;
     });
 
-    this.renderer.render(this.scene, this.camera);
+    if (this.lockOn && entities.length > 0) {
+      this.updateCamera();
+    }
+
+    /* this.renderer.render(this.scene, this.camera); */
   }
 }
