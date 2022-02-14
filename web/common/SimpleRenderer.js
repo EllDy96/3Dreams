@@ -18,30 +18,31 @@ export default class SimpleRenderer {
     this.lockOn = false;
     this.boids = [];
     this.obstacles = [];
+    this.noses = [];
   }
 
   init() {
     /* BOIDS */
     let env = document.getElementById('boids');
-
     for (let i = 0; i < this.flockEntityCount; i++) {
-      let boid = document.createElement('a-cone');
-      boid.setAttribute('radius-bottom', 5);
+      let boid = document.createElement('a-box');
+      boid.setAttribute('depth', 15);
+      boid.setAttribute('width', 5);
       boid.setAttribute('height', 5);
       boid.setAttribute('material', 'metalness: 1; color: white');
-      boid.setAttribute('rotation', '0 0 -90');
       this.boids.push(boid);
       env.appendChild(boid);
+
+      let nose = document.createElement('a-entity');
+      nose.setAttribute('id', `nose${i}`);
+      boid.setAttribute('look-at', `#nose${i}`);
+      this.noses.push(nose);
+      env.appendChild(nose);
     }
 
     for (let i = 0; i < this.obstacleEntityCount; i++) {
       let obstacle = document.createElement('a-sphere');
       obstacle.setAttribute('radius', 50);
-      // TODO: non hardcoddare plis
-      let x = Math.random() * 2000;
-      let y = Math.random() * 600;
-      let z = Math.random() * 2000;
-      obstacle.setAttribute('position', `${x} ${y} ${z}`);
       obstacle.setAttribute('material', 'metalness: 1; color: white');
       this.obstacles.push(obstacle);
       env.appendChild(obstacle);
@@ -292,13 +293,54 @@ export default class SimpleRenderer {
 
       // BOIDS
       /*  this.boids[i].setAttribute('position', `${x} ${y} ${z}`); */
+      this.noses[i].object3D.position.x =
+        mesh.position.x + mesh.localVelocity.x;
+      this.noses[i].object3D.position.y =
+        mesh.position.y + mesh.localVelocity.y;
+      this.noses[i].object3D.position.z =
+        mesh.position.z + mesh.localVelocity.z;
+
       this.boids[i].object3D.position.x = mesh.position.x;
       this.boids[i].object3D.position.y = mesh.position.y;
       this.boids[i].object3D.position.z = mesh.position.z;
 
-      this.boids[i].object3D.rotation.x = mesh.localVelocity.x;
-      this.boids[i].object3D.rotation.y = mesh.localVelocity.y;
-      this.boids[i].object3D.rotation.z = mesh.localVelocity.z;
+      /* let lookAtCoord = new THREE.Vector3(
+        mesh.position.x + mesh.localVelocity.x,
+        mesh.position.y + mesh.localVelocity.y,
+        mesh.position.z + mesh.localVelocity.z
+      );
+      console.log(lookAtCoord);
+      this.boids[i].object3D.lookAt(lookAtCoord);
+
+      this.boids[i].setAttribute('look-at', lookAtCoord); */
+      /* if (i === 1) {
+        console.log(
+          this.boids[i].object3D.position.x,
+          this.boids[i].object3D.position.y,
+          this.boids[i].object3D.position.z
+        );
+        console.log(
+          this.boids[i].childNodes[0].object3D.position.x,
+          this.boids[i].childNodes[0].object3D.position.y,
+          this.boids[i].childNodes[0].object3D.position.z
+        );
+        console.log(
+          mesh.localVelocity.x,
+          mesh.localVelocity.y,
+          mesh.localVelocity.x
+        );
+      } */
+
+      /* let sphericalCoord = new THREE.Spherical();
+      sphericalCoord.setFromCartesianCoords(
+        mesh.localVelocity.x,
+        mesh.localVelocity.y,
+        mesh.localVelocity.z
+      );
+
+      this.boids[i].object3D.rotation.x = Math.PI / 2 - sphericalCoord.phi;
+
+      this.boids[i].object3D.rotation.y = Math.PI / 2 - sphericalCoord.theta; */
     });
 
     const obstacles = this.boidsController.getObstacleEntities();
@@ -318,9 +360,9 @@ export default class SimpleRenderer {
       mesh.position.z = z;
 
       //OBSTACLES
-      entity.x = this.obstacles[i].object3D.position.x;
-      entity.y = this.obstacles[i].object3D.position.y;
-      entity.z = this.obstacles[i].object3D.position.z;
+      this.obstacles[i].object3D.position.x = entity.x;
+      this.obstacles[i].object3D.position.y = entity.y;
+      this.obstacles[i].object3D.position.z = entity.z;
     });
 
     if (this.lockOn && entities.length > 0) {

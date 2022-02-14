@@ -7,7 +7,7 @@ import initSocket from './socket.js';
 class Application {
   constructor() {
     this.flockEntityCount = 500;
-    this.obstacleEntityCount = 50;
+    this.obstacleEntityCount = 20;
     this.simpleRenderer = undefined;
     this.boidsController = undefined;
     this.controlHelper = undefined;
