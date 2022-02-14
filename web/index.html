@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="/node_modules/osc/dist/osc-browser.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
 
     <script src="myBox.js"></script>
 
@@ -30,7 +31,7 @@
       <a-sky id="sky" color="#06101a"></a-sky>
 
       <a-entity rotation="0 169 0">
-        <a-camera position="0 0.4 0"></a-camera>
+        <a-camera id="cam" position="0 0.4 0"></a-camera>
       </a-entity>
 
       <a-entity id="environment" position="0 -1.160 0">
@@ -109,8 +110,8 @@
         ></a-entity>
 
         <a-entity id="boids" scale="0.01 0.01 0.01" position="-9.66 0 -9"></a-entity>
-        <!-- <a-sphere id="sfera" color="yellow" radius="0.1" position="1.661 1.319 3.663" >
-        </a-sphere> -->
+        <!-- <a-box id="sfera" color="yellow" width="0.1" height="0.1" depth="1" position="1.661 1.319 3.663" >
+        </a-box> -->
 
         <a-entity position="5.614 -3.8 -2.921" gltf-model="#env"></a-entity>
       </a-entity>
