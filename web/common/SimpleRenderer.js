@@ -3,9 +3,10 @@
  * SimpleRenderer helps visualizing the entities in the BoidsController and controls the camera.
  */
 export default class SimpleRenderer {
-  constructor({ boidsController, flockEntityCount }) {
+  constructor({ boidsController, flockEntityCount, obstacleEntityCount }) {
     this.boidsController = boidsController;
     this.flockEntityCount = flockEntityCount;
+    this.obstacleEntityCount = obstacleEntityCount;
     this.isDragging = false;
     this.mouseX = 0;
     this.mouseY = 0;
@@ -16,6 +17,7 @@ export default class SimpleRenderer {
     this.cameraRadius = (this.cameraMax * 2) / 3;
     this.lockOn = false;
     this.boids = [];
+    this.obstacles = [];
   }
 
   init() {
@@ -23,11 +25,26 @@ export default class SimpleRenderer {
     let env = document.getElementById('boids');
 
     for (let i = 0; i < this.flockEntityCount; i++) {
-      let boid = document.createElement('a-sphere');
-      boid.setAttribute('color', 'black');
-      boid.setAttribute('radius', 5);
+      let boid = document.createElement('a-cone');
+      boid.setAttribute('radius-bottom', 5);
+      boid.setAttribute('height', 5);
+      boid.setAttribute('material', 'metalness: 1; color: white');
+      boid.setAttribute('rotation', '0 0 -90');
       this.boids.push(boid);
       env.appendChild(boid);
+    }
+
+    for (let i = 0; i < this.obstacleEntityCount; i++) {
+      let obstacle = document.createElement('a-sphere');
+      obstacle.setAttribute('radius', 50);
+      // TODO: non hardcoddare plis
+      let x = Math.random() * 2000;
+      let y = Math.random() * 600;
+      let z = Math.random() * 2000;
+      obstacle.setAttribute('position', `${x} ${y} ${z}`);
+      obstacle.setAttribute('material', 'metalness: 1; color: white');
+      this.obstacles.push(obstacle);
+      env.appendChild(obstacle);
     }
 
     /* LEGACY */
@@ -278,10 +295,14 @@ export default class SimpleRenderer {
       this.boids[i].object3D.position.x = mesh.position.x;
       this.boids[i].object3D.position.y = mesh.position.y;
       this.boids[i].object3D.position.z = mesh.position.z;
+
+      this.boids[i].object3D.rotation.x = mesh.localVelocity.x;
+      this.boids[i].object3D.rotation.y = mesh.localVelocity.y;
+      this.boids[i].object3D.rotation.z = mesh.localVelocity.z;
     });
 
     const obstacles = this.boidsController.getObstacleEntities();
-    obstacles.forEach((entity) => {
+    obstacles.forEach((entity, i) => {
       const x = entity.x;
       const y = entity.y;
       const z = entity.z;
@@ -295,6 +316,11 @@ export default class SimpleRenderer {
       mesh.position.x = x;
       mesh.position.y = y;
       mesh.position.z = z;
+
+      //OBSTACLES
+      entity.x = this.obstacles[i].object3D.position.x;
+      entity.y = this.obstacles[i].object3D.position.y;
+      entity.z = this.obstacles[i].object3D.position.z;
     });
 
     if (this.lockOn && entities.length > 0) {

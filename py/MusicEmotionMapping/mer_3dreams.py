@@ -156,7 +156,7 @@ class AudioFile:
             #low-level features computation (F[2-8] are relevant fo us)
             F, f_names = ShortTermFeatures.feature_extraction(y, self.SR, 0.050*self.SR, 0.025*self.SR)
             
-            energy_avg += sum(F[1]) / F.shape[1]
+            energy_avg += sum(F[1]) / F.shape[1] 
             entropy_avg += sum(F[2]) / F.shape[1]
             
             """
