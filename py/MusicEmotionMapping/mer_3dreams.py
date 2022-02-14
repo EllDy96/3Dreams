@@ -1,9 +1,9 @@
 import pyaudio
 import wave
-import wavio
-import sys
+
 import librosa
 import soundfile as sf
+from pedalboard import Pedalboard, Compressor 
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import load_model
@@ -82,10 +82,33 @@ class AudioFile:
         #Load the audio and resampling it at 44100
         
         audio, nativeSampleRate = librosa.load(file, sr=None)
+        
+
+        # Make a Pedalboard object, containing multiple plugins:
+        board = Pedalboard([Compressor(threshold_db=-15, ratio=4)])
+        
+        '''
+        # change compressor threshold 
+        board[0].threshold_db = -30
+
+        # Pedalboard objects behave like lists, which I can append plugins:
+        board.append(Gain(gain_db=10))
+        board.append(Limiter())
+        '''
+        # Run the audio through this pedalboard
+        processed_audio= board(audio, nativeSampleRate)
+
+        #resampling to 44.1 kHz
         audio = librosa.resample(audio, nativeSampleRate, self.SR)
+        processed_audio = librosa.resample(processed_audio, nativeSampleRate, self.SR)
+        # Write the audios as a wav file:
         sf.write(audio_path, audio, self.SR)
+        sf.write(processedAudio_path, processed_audio, self.SR)
+        
         print("Sampling rate: ", librosa.get_samplerate(file))
         
+        #read the processed audio 
+        #processed_audio, self.SR = sf.read(processedAudio_path, samplerate=44100)
         
         #Load the model
 
@@ -315,9 +338,17 @@ class AudioFile:
 
 #Set the path of the audio file
 audio_path="py/MusicEmotionMapping/DemoMix.wav"
-          
+processedAudio_path="py/MusicEmotionMapping/processedMix.wav"        
 
 # Usage example for pyaudio
 a = AudioFile(audio_path)
 a.play()
 a.close()
+
+'''
+#Testing the processed Mix 
+processedMix= AudioFile(processedAudio_path)
+processedMix.play()
+processedMix.close()
+
+'''
