@@ -2,11 +2,12 @@ import BoidsController from '../common/BoidsController.js';
 import SimpleRenderer from '../common/SimpleRenderer.js';
 import ControlHelper from '../common/ControlHelper.js';
 import BoidsWorkerPlanner from '../common/BoidsWorkerPlanner.js';
+import initSocket from './socket.js';
 
 class Application {
   constructor() {
-    this.flockEntityCount = 1000;
-    this.obstacleEntityCount = 100;
+    this.flockEntityCount = 500;
+    this.obstacleEntityCount = 50;
     this.simpleRenderer = undefined;
     this.boidsController = undefined;
     this.controlHelper = undefined;
@@ -21,11 +22,13 @@ class Application {
     // subdivide the world in to 10*10*10 cubes by passing subDivisionCount as 10
     // this will reduce the time spent for finding nearby entities
     this.boidsController = new BoidsController(2000, 600, 2000, 10);
+    initSocket(this.boidsController);
 
     // create renderer and pass boidsController to render entities
     this.simpleRenderer = new SimpleRenderer({
       boidsController: this.boidsController,
       flockEntityCount: this.flockEntityCount,
+      obstacleEntityCount: this.obstacleEntityCount,
     });
     this.simpleRenderer.init();
 
@@ -91,6 +94,7 @@ class Application {
 }
 
 // create the application when the document is ready
-document.querySelector('a-scene').addEventListener('loaded', function () {
+/* document.querySelector('a-scene').addEventListener('loaded', function () {
   document.addEventListener('DOMContentLoaded', new Application().init());
-});
+}); */
+document.addEventListener('DOMContentLoaded', new Application().init());
