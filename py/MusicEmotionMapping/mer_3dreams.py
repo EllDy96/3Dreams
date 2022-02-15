@@ -101,6 +101,7 @@ class AudioFile:
         #resampling to 44.1 kHz
         audio = librosa.resample(audio, nativeSampleRate, self.SR)
         processed_audio = librosa.resample(processed_audio, nativeSampleRate, self.SR)
+        processedAudio_path="py/MusicEmotionMapping/processedMix.wav"
         # Write the audios as a wav file:
         sf.write(audio_path, audio, self.SR)
         sf.write(processedAudio_path, processed_audio, self.SR)
@@ -114,9 +115,11 @@ class AudioFile:
 
         pred_model = load_model("py/MusicEmotionMapping/best_model.hdf5", compile=False)
         
+
         #Stream the data 
 
-        stream = librosa.stream(file,
+
+        stream = librosa.stream(processedAudio_path,
                         block_length=1,
                         frame_length=self.chunk,
                         hop_length=self.chunk)
@@ -140,7 +143,7 @@ class AudioFile:
         self.entropy = []
         entropy_avg = 0
         
-
+          
         #Predict the VA values for each chunk
         
         for y in stream:
@@ -159,6 +162,7 @@ class AudioFile:
             energy_avg += sum(F[1]) / F.shape[1] 
             entropy_avg += sum(F[2]) / F.shape[1]
             
+            print( ShortTermFeatures)
             """
             print(F.shape[1])
             print(F.shape[1])
@@ -192,7 +196,7 @@ class AudioFile:
                 self.energy.append(energy_avg*10)
                 energy_avg = 0
                 
-                #Energy Computation
+                #Entropy Computation
                 entropy_avg = entropy_avg/self.avg_blocks
                 self.entropy.append(entropy_avg)
                 entropy_avg = 0
@@ -338,7 +342,7 @@ class AudioFile:
 
 #Set the path of the audio file
 audio_path="py/MusicEmotionMapping/DemoMix.wav"
-processedAudio_path="py/MusicEmotionMapping/processedMix.wav"        
+      
 
 # Usage example for pyaudio
 a = AudioFile(audio_path)
