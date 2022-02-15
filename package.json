@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^4.17.2",
     "osc": "^2.4.2",
+    "pedalboard": "^1.0.9",
     "tqdm": "^2.0.3",
     "ws": "^8.4.0"
   },
