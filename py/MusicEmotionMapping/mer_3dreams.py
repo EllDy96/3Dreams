@@ -149,6 +149,12 @@ class AudioFile:
         self.entropy = []
         entropy_avg = 0
         
+        self.zcr = []
+        zcr_avg = 0
+        
+        self.flux = []
+        flux_avg = 0
+        
 
         #Predict the VA values for each chunk
         
@@ -167,6 +173,8 @@ class AudioFile:
             
             energy_avg += sum(F[1]) / F.shape[1] 
             entropy_avg += sum(F[2]) / F.shape[1]
+            zcr_avg += sum(F[0]) / F.shape[1]
+            flux_avg += sum(F[6]) / F.shape[1]
             
             """
             print(F.shape[1])
@@ -201,10 +209,20 @@ class AudioFile:
                 self.energy.append(energy_avg*10)
                 energy_avg = 0
                 
-                #Energy Computation
+                #Entropy Computation
                 entropy_avg = entropy_avg/self.avg_blocks
                 self.entropy.append(entropy_avg)
                 entropy_avg = 0
+                
+                #ZCR Computation
+                zcr_avg = zcr_avg/self.avg_blocks
+                self.zcr.append(zcr_avg*10)
+                zcr_avg = 0
+                
+                #Spectral Flux Computation
+                flux_avg = flux_avg/self.avg_blocks
+                self.flux.append(flux_avg)
+                flux_avg = 0
         
     
             self.numChunks = self.numChunks + 1
@@ -290,17 +308,20 @@ class AudioFile:
                     self.cohesion.append(self.MAX_VAL)
                     '''CUSTOM'''
                     self.separation.append(self.MAX_VAL/2) #spectral(ent o flux)
-                    self.speed.append((self.MAX_SPEED*3)/4) #bpm/energy-ent
+                    #self.separation.append(self.MAX_VAL/2 + (self.flux[i]*100 - 0.6)) 
+                    self.speed.append((self.MAX_SPEED*3)/4) #bpm/energy
+                    #self.speed.append(((self.MAX_SPEED*3)/4)  + (self.energy[i]*10) - 13)
+                    
                 else:
                     #tension area
                     '''CUSTOM'''
                     self.alignment.append(0.0) # 1 / energy-ent
+                    #?????????
                     self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
+                    #self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
                     '''FIXED'''
                     self.separation.append(self.MAX_VAL)
-                    self.speed.append(self.MAX_SPEED)
-                    
-                    
+                    self.speed.append(self.MAX_SPEED)       
                 '''
                 FEAR - DEPRESSED
                 FIXED 
@@ -319,6 +340,7 @@ class AudioFile:
                     '''CUSTOM'''
                     self.alignment.append(0.0) #1/ener-ent
                     self.speed.append(self.MAX_SPEED/2) #spectral-ent (da provare)
+                    
                 else:
                     #peace area
                     '''FIXED'''
@@ -326,7 +348,9 @@ class AudioFile:
                     self.separation.append(0.0)
                     '''CUSTOM'''
                     self.alignment.append(self.MAX_VAL/3)
+                    #self.alignment.append((self.MAX_VAL/3)  + ((self.flux[i]*100)-0.75)*2)
                     self.speed.append(self.MAX_SPEED/2) 
+                    #self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-0.65)*10))
                 
                     
 
@@ -366,6 +390,8 @@ class AudioFile:
                 print("BPM num  ", i, " : ", self.bpm[i])
                 print("Energy num  ", i, " : ", self.energy[i])
                 print("Entropy num  ", i, " : ", self.entropy[i])
+                print("Zero-Crossing Rate num  ", i, " : ", self.zcr[i])
+                print("Spectral Flux num  ", i, " : ", self.flux[i])
                 #print("Corresponding RGB color : ", self.colorMapped[i], "\n\n")
                 print("Alignment   ", i, " : ", self.alignment[i])
                 print("Cohesion   ", i, " : ", self.cohesion[i])
