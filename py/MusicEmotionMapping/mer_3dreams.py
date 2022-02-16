@@ -128,7 +128,7 @@ class AudioFile:
         #Stream the data 
 
 
-        stream = librosa.stream(processedAudio_path,
+        stream = librosa.stream(file,
                         block_length=1,
                         frame_length=self.chunk,
                         hop_length=self.chunk)
@@ -151,6 +151,9 @@ class AudioFile:
         
         self.entropy = []
         entropy_avg = 0
+
+        self.spectralEntropy = []
+        spectralEntropy_avg = 0
         
         self.zcr = []
         zcr_avg = 0
@@ -174,12 +177,14 @@ class AudioFile:
             #low-level features computation (F[2-8] are relevant fo us)
             F, f_names = ShortTermFeatures.feature_extraction(y, self.SR, 0.050*self.SR, 0.025*self.SR)
             
+            zcr_avg += sum(F[0]) / F.shape[1]
             energy_avg += sum(F[1]) / F.shape[1] 
             entropy_avg += sum(F[2]) / F.shape[1]
-            zcr_avg += sum(F[0]) / F.shape[1]
+            spectralEntropy_avg += sum(F[5]) / F.shape[1]
             flux_avg += sum(F[6]) / F.shape[1]
             
-            print( ShortTermFeatures)
+            #print(f_names)
+            
             """
             print(F.shape[1])
             print(F.shape[1])
@@ -217,6 +222,11 @@ class AudioFile:
                 entropy_avg = entropy_avg/self.avg_blocks
                 self.entropy.append(entropy_avg)
                 entropy_avg = 0
+
+                #SpectralEntropy Computation
+                spectralEntropy_avg = spectralEntropy_avg/self.avg_blocks
+                self.spectralEntropy.append(spectralEntropy_avg)
+                spectralEntropy_avg = 0
                 
                 #ZCR Computation
                 zcr_avg = zcr_avg/self.avg_blocks
@@ -254,9 +264,19 @@ class AudioFile:
         
         val = np.multiply(val, scaling_factor_val)
         ar = np.multiply(ar, scaling_factor_ar)       
-        
+       
         val = np.clip(val, -1, 1)
         ar = np.clip(ar, -1, 1)
+        
+        
+        '''
+        Testing the ranging function
+        val= np.arange(-1, 1)
+        ar= np.arange(-1,1)
+        '''
+        
+
+        #non è meglio fare un remapping
         
         val = val.tolist()
         ar = ar.tolist()
@@ -304,9 +324,9 @@ class AudioFile:
             arousal = self.va[i][0]
             valence = self.va[i][1]
             
-            if (arousal>=0):
+            if ((arousal>=-0.2) & (arousal<=0.2)):
                 if(valence>0.2):
-                    #HAPPY area
+                    #HAPPY-->PEACHFUL area
                     '''FIXED'''
                     self.alignment.append(self.MAX_VAL)
                     self.cohesion.append(self.MAX_VAL)
@@ -315,21 +335,9 @@ class AudioFile:
                     #self.separation.append(self.MAX_VAL/2 + (self.flux[i]*100 - 0.6)) 
                     self.speed.append((self.MAX_SPEED*3)/4) #bpm/energy
                     #self.speed.append(((self.MAX_SPEED*3)/4)  + (self.energy[i]*10) - 13)
-                    
-                else:
-                    if((valence<0.2) & (valence>-0.2)):
-                        #TENSION area
-                        '''CUSTOM'''
-                        self.alignment.append(0.0) # 1 / energy-ent
-                        #?????????
-                        self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
-                        #self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
-                        '''FIXED'''
-                        self.separation.append(self.MAX_VAL)
-                        self.speed.append(self.MAX_SPEED)   
-                    
-                    else:
-                        #FEAR area
+                    #self.speed.append(((self.MAX_SPEED*3)/4)  + (self.bpm[i]/100)*1.5) #1.5 is a bpm arbitrary sclaling factor 
+                elif(valence<-0.2):
+                     #FEAR-->Depression area
                         '''CUSTOM'''
                         self.alignment.append(5.0) # 1 / energy-ent
                         #?????????
@@ -348,8 +356,20 @@ class AudioFile:
                         speed -> en-ent
                         align -> 1 / zero cross
                         '''
+            elif(arousal>0.2):
+                    if((valence<0.2) & (valence>-0.2)):
+                        #TENSION-->ALLERT area
+                        '''CUSTOM'''
+                        self.alignment.append(0.0) # 1 / energy-ent
+                        #self.alignment.append((self.MAX_VAL/4)*(1/self.entropy))
+                        self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
+                        #self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
+                        '''FIXED'''
+                        self.separation.append(self.MAX_VAL)
+                        self.speed.append(self.MAX_SPEED)   
+                                              
             else:
-                if(valence<=0):
+                if((valence>=-0.2) & valence<=0):
                     #SAD area
                     '''FIXED'''
                     self.cohesion.append(self.MAX_VAL)
@@ -359,7 +379,7 @@ class AudioFile:
                     self.speed.append(self.MAX_SPEED/2) #spectral-ent (da provare)
                     #self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-1.0)*10))
                     
-                else:
+                elif((valence>0) & (valence<=0.2)):
                     #peace area
                     '''FIXED'''
                     self.cohesion.append(self.MAX_VAL)
