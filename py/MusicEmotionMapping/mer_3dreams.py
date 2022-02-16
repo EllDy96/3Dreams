@@ -128,7 +128,7 @@ class AudioFile:
         #Stream the data 
 
 
-        stream = librosa.stream(processedAudio_path,
+        stream = librosa.stream(file,
                         block_length=1,
                         frame_length=self.chunk,
                         hop_length=self.chunk)
@@ -311,10 +311,10 @@ class AudioFile:
                     self.alignment.append(self.MAX_VAL)
                     self.cohesion.append(self.MAX_VAL)
                     '''CUSTOM'''
-                    self.separation.append(self.MAX_VAL/2) #spectral(ent o flux)
-                    #self.separation.append(self.MAX_VAL/2 + (self.flux[i]*100 - 0.6)) 
-                    self.speed.append((self.MAX_SPEED*3)/4) #bpm/energy
-                    #self.speed.append(((self.MAX_SPEED*3)/4)  + (self.energy[i]*10) - 13)
+                    #self.separation.append(self.MAX_VAL/2) #spectral(ent o flux)
+                    self.separation.append(self.MAX_VAL/2 + (self.flux[i]*100 - 0.6)) 
+                    #self.speed.append((self.MAX_SPEED*3)/4) #bpm/energy
+                    self.speed.append(((self.MAX_SPEED*3)/4)  + (self.energy[i]*10) - 13)
                     
                 else:
                     if((valence<0.2) & (valence>-0.2)):
@@ -322,8 +322,8 @@ class AudioFile:
                         '''CUSTOM'''
                         self.alignment.append(0.0) # 1 / energy-ent
                         #?????????
-                        self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
-                        #self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
+                        #self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
+                        self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
                         '''FIXED'''
                         self.separation.append(self.MAX_VAL)
                         self.speed.append(self.MAX_SPEED)   
@@ -339,15 +339,6 @@ class AudioFile:
                         self.separation.append(self.MAX_VAL)
                         self.speed.append(self.MAX_SPEED)                       
                     
-                        '''
-                        FEAR - DEPRESSED
-                        FIXED 
-                        low cohesion
-                        high separation
-                        CUSTOM
-                        speed -> en-ent
-                        align -> 1 / zero cross
-                        '''
             else:
                 if(valence<=0):
                     #SAD area
@@ -356,8 +347,12 @@ class AudioFile:
                     self.separation.append(0.0)
                     '''CUSTOM'''
                     self.alignment.append(0.0) #1/ener-ent
-                    self.speed.append(self.MAX_SPEED/2) #spectral-ent (da provare)
-                    #self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-1.0)*10))
+                    #self.speed.append(self.MAX_SPEED/2) #spectral-ent (da provare)
+                    if((((self.MAX_SPEED)/2)  + ((self.energy[i]-1.0)*10))<0):
+                        self.speed.append(0.0)
+                        
+                    else:
+                        self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-1.0)*10))
                     
                 else:
                     #peace area
@@ -365,10 +360,10 @@ class AudioFile:
                     self.cohesion.append(self.MAX_VAL)
                     self.separation.append(0.0)
                     '''CUSTOM'''
-                    self.alignment.append(self.MAX_VAL/3)
-                    #self.alignment.append((self.MAX_VAL/3)  + ((self.flux[i]*100)-0.75)*2)
-                    self.speed.append(self.MAX_SPEED/2) 
-                    #self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-0.65)*10))
+                    #self.alignment.append(self.MAX_VAL/3)
+                    self.alignment.append((self.MAX_VAL/3)  + ((self.flux[i]*100)-0.75)*2)
+                    #self.speed.append(self.MAX_SPEED/2) 
+                    self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-0.65)*10))
                 
                     
 
