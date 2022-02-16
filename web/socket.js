@@ -8,7 +8,7 @@ export default function initSocket(boidsController) {
 
   //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
   let oscPort = new osc.WebSocketPort({
-    url: 'wss://192.168.1.192:3000',
+    url: 'wss://192.168.1.187:3000',
   });
 
   oscPort.on('message', function (msg) {
@@ -30,8 +30,8 @@ export default function initSocket(boidsController) {
 
   //NOT NEEDED
   /* oscPort.socket.onmessage = function (e) {
-  console.log('message', e);
-  header.innerHTML = 'lel';
+  console.log("message", e);
+  header.innerHTML = "lel";
 };
  */
 
@@ -45,7 +45,7 @@ export default function initSocket(boidsController) {
         easing: 'linear',
       });
 
-      /* secondarylight[j].object3D.el.getAttribute('light').intensity = intensity; */
+      /* secondarylight[j].object3D.el.getAttribute("light").intensity = intensity; */
     }
   }
 
@@ -80,7 +80,7 @@ export default function initSocket(boidsController) {
     // let rgba = hexToRgbA(hexC);
     let compRgba = hexToRgbA(compHex);
 
-    /* console.log('hex', hexC); */
+    /* console.log("hex", hexC); */
     console.log('complementary', compRgba);
 
     scene.setAttribute('animation', {
@@ -91,7 +91,7 @@ export default function initSocket(boidsController) {
     });
 
     for (let i = 0; i < light.length; i++) {
-      /* light[i].object3D.el.getAttribute('light').color = hexC; */
+      /* light[i].object3D.el.getAttribute("light").color = hexC; */
 
       light[i].setAttribute('animation', {
         property: 'light.color',
@@ -101,7 +101,7 @@ export default function initSocket(boidsController) {
       });
     }
     for (let j = 0; j < secondarylight.length; j++) {
-      /* secondarylight[j].object3D.el.getAttribute('light').color = compHex; */
+      /* secondarylight[j].object3D.el.getAttribute("light").color = compHex; */
       secondarylight[j].setAttribute('animation', {
         property: 'light.color',
         to: compHex,
@@ -122,7 +122,7 @@ export default function initSocket(boidsController) {
   };
 
   /* setInterval(() => {
-  console.log(secondarylight[0].getAttribute('light').color);
-  console.log(secondarylight[0].getAttribute('light').intensity);
+  console.log(secondarylight[0].getAttribute("light").color);
+  console.log(secondarylight[0].getAttribute("light").intensity);
 }); */
 }

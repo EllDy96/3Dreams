@@ -3,7 +3,7 @@ import wave
 
 import librosa
 import soundfile as sf
-from pedalboard import Pedalboard, Compressor 
+#from pedalboard import Pedalboard, Compressor 
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import load_model
@@ -32,6 +32,9 @@ class AudioFile:
     # choose the number of 500 ms audio cuncks on which apply the avarage
     avg_blocks = 6
     TESTING= False #boolean value for plotting colours in real time (used fo testing)
+    MAX_VAL = 5.0
+    MAX_SPEED = 10.0
+    
 
     def __init__(self, file):
         
@@ -83,24 +86,27 @@ class AudioFile:
         
         audio, nativeSampleRate = librosa.load(file, sr=None)
         
-
+        
+        """ ---------- Pre Processing ---------- """
+        '''
         # Make a Pedalboard object, containing multiple plugins:
         board = Pedalboard([Compressor(threshold_db=-15, ratio=4)])
         
-        '''
+        
         # change compressor threshold 
         board[0].threshold_db = -30
 
         # Pedalboard objects behave like lists, which I can append plugins:
         board.append(Gain(gain_db=10))
         board.append(Limiter())
-        '''
+        
         # Run the audio through this pedalboard
         processed_audio= board(audio, nativeSampleRate)
 
         #resampling to 44.1 kHz
         audio = librosa.resample(audio, nativeSampleRate, self.SR)
         processed_audio = librosa.resample(processed_audio, nativeSampleRate, self.SR)
+        processedAudio_path="py/MusicEmotionMapping/processedMix.wav"
         # Write the audios as a wav file:
         sf.write(audio_path, audio, self.SR)
         sf.write(processedAudio_path, processed_audio, self.SR)
@@ -110,13 +116,19 @@ class AudioFile:
         #read the processed audio 
         #processed_audio, self.SR = sf.read(processedAudio_path, samplerate=44100)
         
+        '''
+        """ ---------- VA Values Initialization and Computation ---------- """
+        
         #Load the model
 
         pred_model = load_model("py/MusicEmotionMapping/best_model.hdf5", compile=False)
+    
         
+
         #Stream the data 
 
-        stream = librosa.stream(file,
+
+        stream = librosa.stream(processedAudio_path,
                         block_length=1,
                         frame_length=self.chunk,
                         hop_length=self.chunk)
@@ -140,6 +152,12 @@ class AudioFile:
         self.entropy = []
         entropy_avg = 0
         
+        self.zcr = []
+        zcr_avg = 0
+        
+        self.flux = []
+        flux_avg = 0
+        
 
         #Predict the VA values for each chunk
         
@@ -158,7 +176,10 @@ class AudioFile:
             
             energy_avg += sum(F[1]) / F.shape[1] 
             entropy_avg += sum(F[2]) / F.shape[1]
+            zcr_avg += sum(F[0]) / F.shape[1]
+            flux_avg += sum(F[6]) / F.shape[1]
             
+            print( ShortTermFeatures)
             """
             print(F.shape[1])
             print(F.shape[1])
@@ -192,10 +213,20 @@ class AudioFile:
                 self.energy.append(energy_avg*10)
                 energy_avg = 0
                 
-                #Energy Computation
+                #Entropy Computation
                 entropy_avg = entropy_avg/self.avg_blocks
                 self.entropy.append(entropy_avg)
                 entropy_avg = 0
+                
+                #ZCR Computation
+                zcr_avg = zcr_avg/self.avg_blocks
+                self.zcr.append(zcr_avg*10)
+                zcr_avg = 0
+                
+                #Spectral Flux Computation
+                flux_avg = flux_avg/self.avg_blocks
+                self.flux.append(flux_avg)
+                flux_avg = 0
         
     
             self.numChunks = self.numChunks + 1
@@ -259,8 +290,74 @@ class AudioFile:
             
             self.colorMapped.append(color)
             
-
+            
+            
+        """ ---------- Boids behaviour mapping ---------- """  
         
+        self.alignment = []
+        self.cohesion = []
+        self.separation = []
+        self.speed = []
+        
+        for i in range(self.numAvgValues):
+            
+            arousal = self.va[i][0]
+            valence = self.va[i][1]
+            
+            if (arousal>=0):
+                if(valence>0.2):
+                    #happy area
+                    '''FIXED'''
+                    self.alignment.append(self.MAX_VAL)
+                    self.cohesion.append(self.MAX_VAL)
+                    '''CUSTOM'''
+                    self.separation.append(self.MAX_VAL/2) #spectral(ent o flux)
+                    #self.separation.append(self.MAX_VAL/2 + (self.flux[i]*100 - 0.6)) 
+                    self.speed.append((self.MAX_SPEED*3)/4) #bpm/energy
+                    #self.speed.append(((self.MAX_SPEED*3)/4)  + (self.energy[i]*10) - 13)
+                    
+                else:
+                    #tension area
+                    '''CUSTOM'''
+                    self.alignment.append(0.0) # 1 / energy-ent
+                    #?????????
+                    self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
+                    #self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
+                    '''FIXED'''
+                    self.separation.append(self.MAX_VAL)
+                    self.speed.append(self.MAX_SPEED)       
+                '''
+                FEAR - DEPRESSED
+                FIXED 
+                low cohesion
+                high separation
+                CUSTOM
+                speed -> en-ent
+                align -> 1 / zero cross
+                '''
+            else:
+                if(valence<=0):
+                    #sad area
+                    '''FIXED'''
+                    self.cohesion.append(self.MAX_VAL)
+                    self.separation.append(0.0)
+                    '''CUSTOM'''
+                    self.alignment.append(0.0) #1/ener-ent
+                    self.speed.append(self.MAX_SPEED/2) #spectral-ent (da provare)
+                    
+                else:
+                    #peace area
+                    '''FIXED'''
+                    self.cohesion.append(self.MAX_VAL)
+                    self.separation.append(0.0)
+                    '''CUSTOM'''
+                    self.alignment.append(self.MAX_VAL/3)
+                    #self.alignment.append((self.MAX_VAL/3)  + ((self.flux[i]*100)-0.75)*2)
+                    self.speed.append(self.MAX_SPEED/2) 
+                    #self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-0.65)*10))
+                
+                    
+
         
         """ ---------- Init the audio stream ---------- """ 
   
@@ -297,16 +394,28 @@ class AudioFile:
                 print("BPM num  ", i, " : ", self.bpm[i])
                 print("Energy num  ", i, " : ", self.energy[i])
                 print("Entropy num  ", i, " : ", self.entropy[i])
-                print("Corresponding RGB color : ", self.colorMapped[i], "\n\n")
+                print("Zero-Crossing Rate num  ", i, " : ", self.zcr[i])
+                print("Spectral Flux num  ", i, " : ", self.flux[i])
+                #print("Corresponding RGB color : ", self.colorMapped[i], "\n\n")
+                print("Alignment   ", i, " : ", self.alignment[i])
+                print("Cohesion   ", i, " : ", self.cohesion[i])
+                print("Separation   ", i, " : ", self.separation[i])
+                print("Speed : ", self.speed[i], "\n\n")
                 
                 
-             
+                #sending the OSC messagges
                
                 client.send_message("/RGB", self.colorMapped[i])
                 
-                   #sending the OSC messagge
+                #low-level features messages
                 client.send_message("/ENERGY", self.energy[i])
                 client.send_message("/ENTROPY", self.entropy[i])
+                
+                #boids behaviour messages
+                client.send_message("/ALIGNMENT", self.alignment[i])
+                client.send_message("/COHESION", self.cohesion[i])
+                client.send_message("/SEPARATION", self.separation[i])
+                client.send_message("/SPEED", self.speed[i])              
               
                
 
@@ -338,9 +447,9 @@ class AudioFile:
 
 #Set the path of the audio file
 audio_path="py/MusicEmotionMapping/DemoMix.wav"
-processedAudio_path="py/MusicEmotionMapping/processedMix.wav"        
+      
 
-# Usage example for pyaudio
+# Usage example
 a = AudioFile(audio_path)
 a.play()
 a.close()

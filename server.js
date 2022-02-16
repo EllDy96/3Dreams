@@ -54,8 +54,8 @@ const sslServer = https.createServer(
   app
 );
 
-//INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
-sslServer.listen(3000, '192.168.1.192', () => {
+//INSERT HERE YOUR MACHINE"S IPv4 ADDRESS
+sslServer.listen(3000, '192.168.1.187', () => {
   console.log('secure server on port 3000');
 });
 
