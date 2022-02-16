@@ -8,7 +8,7 @@ export default function initSocket(boidsController) {
 
   //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
   let oscPort = new osc.WebSocketPort({
-    url: 'wss://192.168.1.214:3000',
+    url: 'wss://192.168.1.192:3000',
   });
 
   oscPort.on('message', function (msg) {
