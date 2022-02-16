@@ -18,6 +18,7 @@ export default class ControlHelper {
     // init stats
     this.stats = new Stats();
     this.stats.showPanel(0);
+    //COMMENT to romove GUI from here
     document.body.appendChild(this.stats.dom);
 
     const gui = new dat.GUI();
@@ -26,15 +27,11 @@ export default class ControlHelper {
     gui.add(this.boidsController, 'separationWeight', 0, 5).name('Separation');
     gui.add(this.boidsController, 'maxEntitySpeed', 1, 10).name('Max Speed');
 
-    if (this.boidsController.subDivisionCount > 1) {
-      gui.add(this.renderer.gridVisual, 'visible').name('Show Grid');
-    }
-
-    gui.add(this.renderer, 'lockOn').name('Lock Camera');
     this.boidsButton = gui.add(this, 'addBoids');
     this.obstacleButton = gui.add(this, 'addObstacles');
 
     this.updateButtonLabels();
+    //COMMENT to here
   }
 
   statBegin() {
@@ -63,6 +60,7 @@ export default class ControlHelper {
       this.workerPlanner.sendInitialData();
     }
 
+    //COMMENT this to romove GUI
     this.updateButtonLabels();
   }
 
@@ -81,9 +79,11 @@ export default class ControlHelper {
       this.workerPlanner.sendInitialData();
     }
 
+    //COMMENT this to romove GUI
     this.updateButtonLabels();
   }
 
+  //COMMENT this function to romove GUI
   updateButtonLabels() {
     this.boidsButton.name(
       'Add Boids (' + this.boidsController.getFlockEntities().length + ')'

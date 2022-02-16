@@ -106,6 +106,7 @@ class AudioFile:
         #resampling to 44.1 kHz
         audio = librosa.resample(audio, nativeSampleRate, self.SR)
         processed_audio = librosa.resample(processed_audio, nativeSampleRate, self.SR)
+        processedAudio_path="py/MusicEmotionMapping/processedMix.wav"
         # Write the audios as a wav file:
         sf.write(audio_path, audio, self.SR)
         sf.write(processedAudio_path, processed_audio, self.SR)
@@ -123,9 +124,11 @@ class AudioFile:
         pred_model = load_model("py/MusicEmotionMapping/best_model.hdf5", compile=False)
     
         
+
         #Stream the data 
 
-        stream = librosa.stream(file,
+
+        stream = librosa.stream(processedAudio_path,
                         block_length=1,
                         frame_length=self.chunk,
                         hop_length=self.chunk)
@@ -176,6 +179,7 @@ class AudioFile:
             zcr_avg += sum(F[0]) / F.shape[1]
             flux_avg += sum(F[6]) / F.shape[1]
             
+            print( ShortTermFeatures)
             """
             print(F.shape[1])
             print(F.shape[1])
@@ -457,7 +461,7 @@ class AudioFile:
 
 #Set the path of the audio file
 audio_path="py/MusicEmotionMapping/DemoMix.wav"
-processedAudio_path="py/MusicEmotionMapping/processedMix.wav"        
+      
 
 # Usage example
 a = AudioFile(audio_path)
