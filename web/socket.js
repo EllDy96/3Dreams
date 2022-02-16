@@ -8,7 +8,7 @@ export default function initSocket(boidsController) {
 
   //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
   let oscPort = new osc.WebSocketPort({
-    url: 'wss://192.168.1.187:3000',
+    url: 'wss://192.168.1.192:3000',
   });
 
   oscPort.on('message', function (msg) {
@@ -20,7 +20,22 @@ export default function initSocket(boidsController) {
         console.log('message', msg);
         lightIntensity(msg.args);
         break;
-
+      case '/COHESION':
+        console.log('COHESION', msg.args);
+        changeCohesion(msg.args);
+        break;
+      case '/ALIGNMENT':
+        console.log('ALIGNMENT', msg.args);
+        changeAlignment(msg.args);
+        break;
+      case '/SEPARATION':
+        console.log('SEPARATION', msg.args);
+        changeSeparation(msg.args);
+        break;
+      case '/SPEED':
+        console.log('SPEED', msg.args);
+        changeMaxSpeed(msg.args);
+        break;
       default:
         break;
     }
@@ -34,6 +49,22 @@ export default function initSocket(boidsController) {
   header.innerHTML = "lel";
 };
  */
+
+  function changeAlignment(args) {
+    boidsController.setAligmentWeight(args[0]);
+  }
+
+  function changeSeparation(args) {
+    boidsController.setSeparationWeight(args[0]);
+  }
+
+  function changeCohesion(args) {
+    boidsController.setCohesionWeight(args[0]);
+  }
+
+  function changeMaxSpeed(args) {
+    boidsController.setMaxSpeed(args[0]);
+  }
 
   function lightIntensity(args) {
     let intensity = args[0];
