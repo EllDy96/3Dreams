@@ -302,7 +302,7 @@ class AudioFile:
             
             if (arousal>=0):
                 if(valence>0.2):
-                    #happy area
+                    #HAPPY area
                     '''FIXED'''
                     self.alignment.append(self.MAX_VAL)
                     self.cohesion.append(self.MAX_VAL)
@@ -313,33 +313,47 @@ class AudioFile:
                     #self.speed.append(((self.MAX_SPEED*3)/4)  + (self.energy[i]*10) - 13)
                     
                 else:
-                    #tension area
-                    '''CUSTOM'''
-                    self.alignment.append(0.0) # 1 / energy-ent
-                    #?????????
-                    self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
-                    #self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
-                    '''FIXED'''
-                    self.separation.append(self.MAX_VAL)
-                    self.speed.append(self.MAX_SPEED)       
-                '''
-                FEAR - DEPRESSED
-                FIXED 
-                low cohesion
-                high separation
-                CUSTOM
-                speed -> en-ent
-                align -> 1 / zero cross
-                '''
+                    if((valence<0.2) & (valence>-0.2)):
+                        #TENSION area
+                        '''CUSTOM'''
+                        self.alignment.append(0.0) # 1 / energy-ent
+                        #?????????
+                        self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
+                        #self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
+                        '''FIXED'''
+                        self.separation.append(self.MAX_VAL)
+                        self.speed.append(self.MAX_SPEED)   
+                    
+                    else:
+                        #FEAR area
+                        '''CUSTOM'''
+                        self.alignment.append(5.0) # 1 / energy-ent
+                        #?????????
+                        self.cohesion.append(0.0) #1/zero-crossing o 1/spectral flux
+                        #????
+                        '''FIXED'''
+                        self.separation.append(self.MAX_VAL)
+                        self.speed.append(self.MAX_SPEED)                       
+                    
+                        '''
+                        FEAR - DEPRESSED
+                        FIXED 
+                        low cohesion
+                        high separation
+                        CUSTOM
+                        speed -> en-ent
+                        align -> 1 / zero cross
+                        '''
             else:
                 if(valence<=0):
-                    #sad area
+                    #SAD area
                     '''FIXED'''
                     self.cohesion.append(self.MAX_VAL)
                     self.separation.append(0.0)
                     '''CUSTOM'''
                     self.alignment.append(0.0) #1/ener-ent
                     self.speed.append(self.MAX_SPEED/2) #spectral-ent (da provare)
+                    #self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-1.0)*10))
                     
                 else:
                     #peace area
