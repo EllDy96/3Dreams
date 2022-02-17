@@ -37,6 +37,18 @@ export default function initSocket(boidsController) {
         console.log('SPEED', msg.args);
         changeMaxSpeed(msg.args);
         break;
+      case '/VALENCE':
+        console.log('VALENCE', msg.args);
+
+        break;
+      case '/AROUSAL':
+        console.log('AROUSAL', msg.args);
+        if (msg.args < 0) {
+          increaseSadness(msg.args);
+        } else {
+          decreaseSadness(msg.args);
+        }
+        break;
       default:
         break;
     }
@@ -50,6 +62,52 @@ export default function initSocket(boidsController) {
   header.innerHTML = "lel";
 };
  */
+
+  function decreaseSadness(arousal) {
+    scene.setAttribute('animation__arousal', {
+      property: 'fog.density',
+      to: 0.013,
+      dur: 500,
+      easing: 'linear',
+    });
+
+    light[0].setAttribute('animation__arousal', {
+      property: 'light.intensity',
+      to: 0.5,
+      dur: 1500,
+      easing: 'linear',
+    });
+
+    light[1].setAttribute('animation__arousal', {
+      property: 'light.intensity',
+      to: 2.5,
+      dur: 1500,
+      easing: 'linear',
+    });
+  }
+
+  function increaseSadness(arousal) {
+    scene.setAttribute('animation__arousal', {
+      property: 'fog.density',
+      to: 0.06 - arousal / 5,
+      dur: 1500,
+      easing: 'linear',
+    });
+
+    light[0].setAttribute('animation__arousal', {
+      property: 'light.intensity',
+      to: 1.7 - arousal / 4,
+      dur: 1500,
+      easing: 'linear',
+    });
+
+    light[1].setAttribute('animation__arousal', {
+      property: 'light.intensity',
+      to: 0,
+      dur: 1500,
+      easing: 'linear',
+    });
+  }
 
   function changeAlignment(args) {
     boidsController.setAligmentWeight(args[0]);
@@ -71,7 +129,7 @@ export default function initSocket(boidsController) {
     let min_value = 0.02;
     let max_value = 0.21;
     let value = args[0];
-    let max_intensity = 4;
+    let max_intensity = 3;
     let min_intensity = 0.1;
     let intensity =
       ((value - min_value) * (max_intensity - min_intensity)) /
@@ -121,7 +179,7 @@ export default function initSocket(boidsController) {
     let compRgba = hexToRgbA(compHex);
 
     /* console.log("hex", hexC); */
-    console.log('complementary', compRgba);
+    /* console.log('complementary', compRgba); */
 
     scene.setAttribute('animation', {
       property: 'fog.color',
