@@ -327,7 +327,7 @@ class AudioFile:
                     if((valence<0.2) & (valence>-0.2)):
                         #TENSION area
                         '''CUSTOM'''
-                        self.alignment.append(self.MAX_VAL/4+((0.060-self.spec_ent[i])*50))# 1 / spectral entropy
+                        self.alignment.append(self.MAX_VAL/5+((0.060-self.spec_ent[i])*30))# 1 / spectral entropy
                         # the boids react to the percussive element of the spectrum 
                         #self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
                         self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
