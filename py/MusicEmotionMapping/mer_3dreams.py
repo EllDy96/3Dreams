@@ -315,6 +315,10 @@ class AudioFile:
                 if(valence>0.2):
                     #HAPPY area
                     '''FIXED'''
+                    
+                    '''
+                    What about fixing a 
+                    '''
                     self.alignment.append(self.MAX_VAL)
                     self.cohesion.append(self.MAX_VAL)
                     '''CUSTOM'''
@@ -327,10 +331,11 @@ class AudioFile:
                     if((valence<0.2) & (valence>-0.2)):
                         #TENSION area
                         '''CUSTOM'''
-                        self.alignment.append(0.0) # 1 / energy-ent
-                        #?????????
+                        self.alignment.append(self.MAX_VAL/2+((0.060-self.spec_ent[i])*100))# 1 / spectral entropy
+                        # the boids react to the percussive element of the spectrum 
                         #self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
                         self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
+                        #the more is harmonic the less is cohesive
                         '''FIXED'''
                         self.separation.append(self.MAX_VAL)
                         self.speed.append(self.MAX_SPEED)   
@@ -339,7 +344,7 @@ class AudioFile:
                         #FEAR area
                         '''CUSTOM'''
                         self.alignment.append(5.0) # 1 / energy-ent
-                        #?????????
+                        
                         self.cohesion.append(0.0) #1/zero-crossing o 1/spectral flux
                         #????
                         '''FIXED'''
@@ -352,17 +357,14 @@ class AudioFile:
                     '''FIXED'''
                     self.cohesion.append(self.MAX_VAL)
                     self.separation.append(0.0)
+                    self.alignment.append(0.0)
                     '''CUSTOM'''
-                    self.alignment.append(0.0) #1/ener-ent
-                    #self.speed.append(self.MAX_SPEED/2) #spectral-ent (da provare)
-                    if((((self.MAX_SPEED)/2)  + ((self.energy[i]-1.0)*10))<0):
-                        self.speed.append(1.5)
-                        
-                    else:
-                        self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-1.0)*10))
+                
+                    self.speed.append((self.MAX_SPEED/4)+(self.spec_ent[i]-0.035)*100) #spectral-ent (da provare)
+                    
                     
                 else:
-                    #peace area
+                    #peace area79
                     '''FIXED'''
                     self.cohesion.append(self.MAX_VAL)
                     self.separation.append(0.0)
@@ -370,7 +372,7 @@ class AudioFile:
                     #self.alignment.append(self.MAX_VAL/3)
                     self.alignment.append((self.MAX_VAL/3)  + ((self.flux[i]*100)-0.75)*2)
                     #self.speed.append(self.MAX_SPEED/2) 
-                    self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-0.65)*10))
+                    self.speed.append(((self.MAX_SPEED)/3)  + ((self.energy[i]-0.65)*10))
                 
                     
 
