@@ -66,16 +66,16 @@ class AudioFile:
         fatigue_pos= [-0.3,-0.8]#darkBlue
 
  
-        bgr = create_2d_color_map([angry_pos, fear_pos, allert_pos,  happy_pos, serene_pos,relaxed_pos,
-                                    calm_pos, sad_pos, depressed_pos,depressed_pos_2, bored_pos, fatigue_pos], 
-                                    [colors["red"],  colors["coral"],colors["orange"], colors["yellow"], 
-                                    colors["lightGreen"], 
-                                    colors["green"],colors["darkGreen"],colors["purple"],colors["lightBlue"], 
-                                    colors["lightBlue"],colors["blue"], colors["darkBlue"]], 400, 400)
+        # bgr = create_2d_color_map([angry_pos, fear_pos, allert_pos,  happy_pos, serene_pos,relaxed_pos,
+        #                             calm_pos, sad_pos, depressed_pos,depressed_pos_2, bored_pos, fatigue_pos], 
+        #                             [colors["red"],  colors["coral"],colors["orange"], colors["yellow"], 
+        #                             colors["lightGreen"], 
+        #                             colors["green"],colors["darkGreen"],colors["purple"],colors["lightBlue"], 
+        #                             colors["lightBlue"],colors["blue"], colors["darkBlue"]], 400, 400)
 
  
-        cv2.imshow('VA_ColorMap', bgr)
-        ch = cv2.waitKey(10000)
+        # cv2.imshow('VA_ColorMap', bgr)
+        # ch = cv2.waitKey(10000)
         
 
         """ ---------- Audio Analysis and Color Mapping ---------- """ 
