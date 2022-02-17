@@ -315,10 +315,6 @@ class AudioFile:
                 if(valence>0.2):
                     #HAPPY area
                     '''FIXED'''
-                    
-                    '''
-                    What about fixing a 
-                    '''
                     self.alignment.append(self.MAX_VAL)
                     self.cohesion.append(self.MAX_VAL)
                     '''CUSTOM'''
