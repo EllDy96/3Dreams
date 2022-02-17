@@ -364,7 +364,7 @@ class AudioFile:
                     
                     
                 else:
-                    #peace area79
+                    #peace area
                     '''FIXED'''
                     self.cohesion.append(self.MAX_VAL)
                     self.separation.append(0.0)
