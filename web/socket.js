@@ -5,10 +5,11 @@ export default function initSocket(boidsController) {
   let sky = document.getElementById('sky');
   let scene = document.getElementById('scene');
   let colorAnimation = document.getElementsByClassName('colorAnimation');
+  let obstacles = boidsController.getObstacleEntities();
 
   //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
   let oscPort = new osc.WebSocketPort({
-    url: 'wss://192.168.1.192:3000',
+    url: 'wss://192.168.1.208:3000',
   });
 
   oscPort.on('message', function (msg) {
@@ -16,7 +17,7 @@ export default function initSocket(boidsController) {
       case '/RGB':
         colorOnMsg(msg.args);
         break;
-      case '/ENERGY':
+      case '/INST_ENERGY':
         console.log('message', msg);
         lightIntensity(msg.args);
         break;
@@ -67,16 +68,24 @@ export default function initSocket(boidsController) {
   }
 
   function lightIntensity(args) {
-    let intensity = args[0];
+    let min_value = 0.02;
+    let max_value = 0.21;
+    let value = args[0];
+    let max_intensity = 4;
+    let min_intensity = 0.1;
+    let intensity =
+      ((value - min_value) * (max_intensity - min_intensity)) /
+        (max_value - min_value) +
+      min_intensity;
     for (let j = 0; j < secondarylight.length; j++) {
       secondarylight[j].setAttribute('animation__light', {
         property: 'light.intensity',
         to: intensity,
-        dur: 500,
+        dur: 300,
         easing: 'linear',
       });
 
-      /* secondarylight[j].object3D.el.getAttribute("light").intensity = intensity; */
+      // secondarylight[j].object3D.el.getAttribute('light').intensity = intensity;
     }
   }
 
