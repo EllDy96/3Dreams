@@ -144,6 +144,9 @@ class AudioFile:
         self.energy = []
         energy_avg = 0
         
+        self.spec_ent = []
+        spec_ent_avg = 0
+        
         self.entropy = []
         entropy_avg = 0
         
@@ -152,6 +155,8 @@ class AudioFile:
         
         self.flux = []
         flux_avg = 0
+        
+        self.ener_inst = []
         
 
         #Predict the VA values for each chunk
@@ -170,9 +175,12 @@ class AudioFile:
             F, f_names = ShortTermFeatures.feature_extraction(y, self.SR, 0.050*self.SR, 0.025*self.SR)
             
             energy_avg += sum(F[1]) / F.shape[1] 
+            self.ener_inst.append(sum(F[1]) / F.shape[1])
             entropy_avg += sum(F[2]) / F.shape[1]
             zcr_avg += sum(F[0]) / F.shape[1]
             flux_avg += sum(F[6]) / F.shape[1]
+            spec_ent_avg += sum(F[7]) / F.shape[1]
+            
             
             """
             print(F.shape[1])
@@ -221,6 +229,11 @@ class AudioFile:
                 flux_avg = flux_avg/self.avg_blocks
                 self.flux.append(flux_avg)
                 flux_avg = 0
+                
+                #Spectral Entropy Computation
+                spec_ent_avg = spec_ent_avg/self.avg_blocks
+                self.spec_ent.append(spec_ent_avg)
+                spec_ent_avg = 0
         
     
             self.numChunks = self.numChunks + 1
@@ -305,10 +318,10 @@ class AudioFile:
                     self.alignment.append(self.MAX_VAL)
                     self.cohesion.append(self.MAX_VAL)
                     '''CUSTOM'''
-                    self.separation.append(self.MAX_VAL/2) #spectral(ent o flux)
-                    #self.separation.append(self.MAX_VAL/2 + (self.flux[i]*100 - 0.6)) 
-                    self.speed.append((self.MAX_SPEED*3)/4) #bpm/energy
-                    #self.speed.append(((self.MAX_SPEED*3)/4)  + (self.energy[i]*10) - 13)
+                    #self.separation.append(self.MAX_VAL/2) #spectral(ent o flux)
+                    self.separation.append(self.MAX_VAL/2 + (self.flux[i]*100 - 0.6)) 
+                    #self.speed.append((self.MAX_SPEED*3)/4) #bpm/energy
+                    self.speed.append(((self.MAX_SPEED*3)/4)  + (self.energy[i]*10) - 13)
                     
                 else:
                     if((valence<0.2) & (valence>-0.2)):
@@ -316,8 +329,8 @@ class AudioFile:
                         '''CUSTOM'''
                         self.alignment.append(0.0) # 1 / energy-ent
                         #?????????
-                        self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
-                        #self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
+                        #self.cohesion.append(self.MAX_VAL/2) #1/zero-crossing o 1/spectral flux
+                        self.cohesion.append(self.MAX_VAL/2 + ((0.34 - self.zcr[i])*10))
                         '''FIXED'''
                         self.separation.append(self.MAX_VAL)
                         self.speed.append(self.MAX_SPEED)   
@@ -332,16 +345,7 @@ class AudioFile:
                         '''FIXED'''
                         self.separation.append(self.MAX_VAL)
                         self.speed.append(self.MAX_SPEED)                       
-                    
-                        '''
-                        FEAR - DEPRESSED
-                        FIXED 
-                        low cohesion
-                        high separation
-                        CUSTOM
-                        speed -> en-ent
-                        align -> 1 / zero cross
-                        '''
+
             else:
                 if(valence<=0):
                     #SAD area
@@ -352,7 +356,7 @@ class AudioFile:
                     self.alignment.append(0.0) #1/ener-ent
                     #self.speed.append(self.MAX_SPEED/2) #spectral-ent (da provare)
                     if((((self.MAX_SPEED)/2)  + ((self.energy[i]-1.0)*10))<0):
-                        self.speed.append(0.0)
+                        self.speed.append(1.5)
                         
                     else:
                         self.speed.append(((self.MAX_SPEED)/2)  + ((self.energy[i]-1.0)*10))
@@ -397,10 +401,18 @@ class AudioFile:
         
         data = self.wf.readframes(self.chunk)
         
-        while (data != '') & (cnt<=(self.numChunks-1)):  
+        while (data != '') & (cnt<=(self.numChunks-2)):  
+            
+            print("Instantaneous energy chunk num  ", cnt, " : ",  self.ener_inst[cnt])
+            
+            #Instantaneous energy messages
+            client.send_message("/INST_ENERGY", self.ener_inst[cnt])
+            
                      
             if(cnt%self.avg_blocks == 0):
-                #Send OSC message with the RGB values    
+                
+                #Print the values    
+                
                 print("Arousal avarage num  ", i, " : ",  self.va[i][0])
                 print("Valence avarage num  ", i, " : ", self.va[i][1])
                 print("BPM num  ", i, " : ", self.bpm[i])
@@ -408,6 +420,7 @@ class AudioFile:
                 print("Entropy num  ", i, " : ", self.entropy[i])
                 print("Zero-Crossing Rate num  ", i, " : ", self.zcr[i])
                 print("Spectral Flux num  ", i, " : ", self.flux[i])
+                print("Spectral Entropy num  ", i, " : ", self.spec_ent[i])
                 #print("Corresponding RGB color : ", self.colorMapped[i], "\n\n")
                 print("Alignment   ", i, " : ", self.alignment[i])
                 print("Cohesion   ", i, " : ", self.cohesion[i])
@@ -415,9 +428,16 @@ class AudioFile:
                 print("Speed : ", self.speed[i], "\n\n")
                 
                 
-                #sending the OSC messagges
-               
+                #Sending the OSC messagges
+                
+                
+                #RGB values messages
                 client.send_message("/RGB", self.colorMapped[i])
+                
+                #VA values messages
+                client.send_message("/VALENCE", self.va[i][1])
+                client.send_message("/AROUSAL", self.va[i][0])
+                
                 
                 #low-level features messages
                 client.send_message("/ENERGY", self.energy[i])
@@ -430,13 +450,14 @@ class AudioFile:
                 client.send_message("/SPEED", self.speed[i])              
               
                
-
+                '''
                 #Testing the color with a real time plot                
                 if (self.TESTING):
                     plt.imshow([[(self.colorMapped[i][0],self.colorMapped[i][1],self.colorMapped[i][2])]])
                     plt.ion()
                     plt.show()
                     plt.pause(0.001)   
+                '''
                 
                 i = i + 1
                     
