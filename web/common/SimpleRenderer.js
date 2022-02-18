@@ -119,8 +119,25 @@ export default class SimpleRenderer {
       entity.y = this.obstacles[i].object3D.position.y;
     });
 
+    //Updating period counter
     this.oscCounter++;
     if (this.oscCounter === this.obstaclesPeriods[0].length)
       this.oscCounter = 0;
+  }
+
+  breathe(llFeature) {
+    let targetRadius = llFeature * 150 + 20;
+    if (targetRadius > 50) targetRadius = 50;
+
+    const obstacles = this.boidsController.getObstacleEntities();
+    obstacles.forEach((entity, i) => {
+      this.obstacles[i].setAttribute('animation', {
+        property: 'radius',
+        to: targetRadius,
+        dur: 500,
+        elasticity: '500',
+        easing: 'easeOutElastic',
+      });
+    });
   }
 }

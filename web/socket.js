@@ -1,4 +1,4 @@
-export default function initSocket(boidsController) {
+export default function initSocket(boidsController, simpleRenderer) {
   //HTML OBJ
   let light = document.getElementsByClassName('primaryLight');
   let secondarylight = document.getElementsByClassName('secondaryLight');
@@ -9,7 +9,7 @@ export default function initSocket(boidsController) {
 
   //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
   let oscPort = new osc.WebSocketPort({
-    url: 'wss://192.168.1.208:3000',
+    url: 'wss://192.168.1.192:3000',
   });
 
   oscPort.on('message', function (msg) {
@@ -18,31 +18,31 @@ export default function initSocket(boidsController) {
         colorOnMsg(msg.args);
         break;
       case '/INST_ENERGY':
-        console.log('message', msg);
+        //console.log('message', msg);
         lightIntensity(msg.args);
-        break;
+        simpleRenderer.breathe(msg.args[0]);
       case '/COHESION':
-        console.log('COHESION', msg.args);
+        //console.log('COHESION', msg.args);
         changeCohesion(msg.args);
         break;
       case '/ALIGNMENT':
-        console.log('ALIGNMENT', msg.args);
+        //console.log('ALIGNMENT', msg.args);
         changeAlignment(msg.args);
         break;
       case '/SEPARATION':
-        console.log('SEPARATION', msg.args);
+        //console.log('SEPARATION', msg.args);
         changeSeparation(msg.args);
         break;
       case '/SPEED':
-        console.log('SPEED', msg.args);
+        //console.log('SPEED', msg.args);
         changeMaxSpeed(msg.args);
         break;
       case '/VALENCE':
-        console.log('VALENCE', msg.args);
+        //console.log('VALENCE', msg.args);
 
         break;
       case '/AROUSAL':
-        console.log('AROUSAL', msg.args);
+        //console.log('AROUSAL', msg.args);
         if (msg.args < 0) {
           increaseSadness(msg.args);
         } else {

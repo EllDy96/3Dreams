@@ -22,7 +22,6 @@ class Application {
     // subdivide the world in to 10*10*10 cubes by passing subDivisionCount as 10
     // this will reduce the time spent for finding nearby entities
     this.boidsController = new BoidsController(2000, 600, 2000, 10);
-    initSocket(this.boidsController);
 
     // create renderer and pass boidsController to render entities
     this.simpleRenderer = new SimpleRenderer({
@@ -31,6 +30,8 @@ class Application {
       obstacleEntityCount: this.obstacleEntityCount,
     });
     this.simpleRenderer.init();
+
+    initSocket(this.boidsController, this.simpleRenderer);
 
     // create worker planner to run the simulation in WebWorker thread.
     // keep the default worker count as 4
