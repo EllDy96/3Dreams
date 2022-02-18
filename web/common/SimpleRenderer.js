@@ -10,6 +10,9 @@ export default class SimpleRenderer {
     this.boids = [];
     this.obstacles = [];
     this.noses = [];
+    //Obstacle angular velocities
+    this.oscCounter = 0;
+    this.obstaclesPeriods = [];
   }
 
   init() {
@@ -33,12 +36,25 @@ export default class SimpleRenderer {
 
     for (let i = 0; i < this.obstacleEntityCount; i++) {
       let obstacle = document.createElement('a-sphere');
-      obstacle.setAttribute('radius', 50);
+      obstacle.setAttribute('radius', 40);
       obstacle.setAttribute('material', 'metalness: 1; color: white');
       this.obstacles.push(obstacle);
       env.appendChild(obstacle);
-    }
 
+      //Periods generation
+      let freq = 2;
+      let period = 1 / freq;
+      let Fs = 5000;
+      let N = Math.floor(period * Fs);
+      let phase = 2 * Math.PI * Math.random();
+      let amp = 0.1 * Math.random();
+      let osc = [];
+      for (let i = 0; i < N; i++) {
+        osc.push(amp * Math.cos((2 * Math.PI * freq * i) / Fs + phase));
+      }
+
+      this.obstaclesPeriods.push(osc);
+    }
     this.render();
   }
 
@@ -95,8 +111,16 @@ export default class SimpleRenderer {
 
       //OBSTACLES
       this.obstacles[i].object3D.position.x = entity.x;
-      this.obstacles[i].object3D.position.y = entity.y;
       this.obstacles[i].object3D.position.z = entity.z;
+
+      //Oscillation on Y-dir
+      this.obstacles[i].object3D.position.y =
+        entity.y + this.obstaclesPeriods[i][this.oscCounter];
+      entity.y = this.obstacles[i].object3D.position.y;
     });
+
+    this.oscCounter++;
+    if (this.oscCounter === this.obstaclesPeriods[0].length)
+      this.oscCounter = 0;
   }
 }
