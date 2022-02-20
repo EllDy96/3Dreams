@@ -9,7 +9,7 @@ export default function initSocket(boidsController, simpleRenderer) {
 
   //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
   let oscPort = new osc.WebSocketPort({
-    url: 'wss://192.168.1.192:3000',
+    url: 'wss://192.168.1.208:3000',
   });
 
   oscPort.on('message', function (msg) {
@@ -89,14 +89,14 @@ export default function initSocket(boidsController, simpleRenderer) {
   function increaseSadness(arousal) {
     scene.setAttribute('animation__arousal', {
       property: 'fog.density',
-      to: 0.06 - arousal / 5,
+      to: 0.05 - arousal / 7,
       dur: 1500,
       easing: 'linear',
     });
 
     light[0].setAttribute('animation__arousal', {
       property: 'light.intensity',
-      to: 1.7 - arousal / 4,
+      to: 2.5 - arousal / 4,
       dur: 1500,
       easing: 'linear',
     });

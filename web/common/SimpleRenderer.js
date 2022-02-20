@@ -126,7 +126,8 @@ export default class SimpleRenderer {
   }
 
   breathe(llFeature) {
-    let targetRadius = llFeature * 150 + 20;
+    /* let targetRadius = llFeature * 150 + 20; */
+    let targetRadius = llFeature * 50 + 20;
     if (targetRadius > 50) targetRadius = 50;
 
     const obstacles = this.boidsController.getObstacleEntities();
