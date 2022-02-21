@@ -2,7 +2,7 @@ import pyaudio
 import wave
 import librosa
 import soundfile as sf
-#from pedalboard import Pedalboard, Compressor 
+from pedalboard import Pedalboard, Compressor, HighpassFilter, Limiter, Gain
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import load_model
@@ -92,7 +92,7 @@ class AudioFile:
         
         processedAudio_path="py/MusicEmotionMapping/processedMix.wav"
         
-        '''
+       
         # Make a Pedalboard object, containing multiple plugins:
         board = Pedalboard([HighpassFilter(cutoff_frequency_hz=100),
                             Compressor(threshold_db=-24, ratio=10,attack_ms=25,release_ms=300),
@@ -113,7 +113,7 @@ class AudioFile:
         
         # Save the audios as a wav file:
         sf.write(processedAudio_path, processed_audio, self.SR)
-        '''  
+         
       
         """ ---------- VA Values Initialization and Computation ---------- """
         
@@ -447,7 +447,7 @@ class AudioFile:
 
 
 #Set the path of the audio file
-audio_path="py/MusicEmotionMapping/horroPart.wav"
+audio_path="py/MusicEmotionMapping/FinalMix.wav"
 
 #Usage example
 a = AudioFile(audio_path)
