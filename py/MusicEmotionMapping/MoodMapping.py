@@ -2,9 +2,8 @@ import numpy as np
 import cv2
 import scipy.spatial
 
-
 def get_color_for_point(point_coords, list_of_point_centers, list_of_colors):
-    """
+    '''
     get_color_for_point() computes an RGB color value for a point in the
     (-1, 1) 2D plane, based on a dd of RGB color values, defined on particular
     points of the same 2D plane.
@@ -15,7 +14,7 @@ def get_color_for_point(point_coords, list_of_point_centers, list_of_colors):
     :param list_of_colors:  list of RGB color values [[R1, G1, B1], ...,
     [RN, GN, BN]] for the N points in the 2D plane (see prev atribute)
     :return: interpolated RGB color for the input point (1st arg)
-    """
+    '''
     color = np.array([0.0, 0.0, 0.0])
     # get distances of the "query" point from all other points
     distances = scipy.spatial.distance.cdist([point_coords],
@@ -36,7 +35,7 @@ def get_color_for_point(point_coords, list_of_point_centers, list_of_colors):
 
 
 def create_2d_color_map(list_of_points, list_of_colors, height, width):
-    """
+    '''
     create_2d_color_map() creates a colormap by interpolating RGB color values,
     given a list of colors to be defined on particular points of the 2D
     plane.
@@ -47,7 +46,7 @@ def create_2d_color_map(list_of_points, list_of_colors, height, width):
     :param height: output image height
     :param width:  output image weight
     :return: estimated color image
-    """
+    '''
     rgb = np.zeros((height, width, 3)).astype("uint8")
     c_x = int(width / 2)
     c_y = int(height / 2)
@@ -66,41 +65,3 @@ def create_2d_color_map(list_of_points, list_of_colors, height, width):
                 x - win_size - 1 : x + win_size + 1] = color
     bgr = cv2.cvtColor(rgb, cv2.COLOR_BGR2RGB)
     return bgr
-
-
-''' if __name__ == "__main__":
-    colors = {"coral": [255,127,80],
-              "pink": [255, 192, 203],
-              "orange": [255, 165, 0],
-              "blue": [0, 0, 205],
-              "green": [0, 205, 0],
-              "red": [205, 0, 0],
-              "yellow": [204, 204, 0]}
-    angry_pos = [-0.8, 0.5]
-    fear_pos = [-0.3, 0.8]
-    happy_pos = [0.6, 0.6]
-    calm_pos = [0.4, -0.5]
-    sad_pos = [-0.6, -0.4]
-    bgr = create_2d_color_map([angry_pos, fear_pos, happy_pos,
-                               calm_pos, sad_pos],
-                              [colors["red"],  colors["yellow"],
-                               colors["orange"], colors["green"],
-                               colors["blue"]], 200, 200)
-    cv2.imshow('Signal', bgr)
-    ch = cv2.waitKey(10000)
-    
-    
-
-    
-    val = +0.7;
-    ar = -0.5;
-        
-
-    
-    
-    color = get_color_for_point([ar, val], [angry_pos, fear_pos, happy_pos,
-                               calm_pos, sad_pos], [colors["red"],  colors["yellow"],
-                               colors["orange"], colors["green"],
-                               colors["blue"]])
-    
-    print(color) '''
