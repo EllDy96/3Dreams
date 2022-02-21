@@ -6,6 +6,7 @@ export default function initSocket(boidsController, simpleRenderer) {
   let scene = document.getElementById('scene');
   let colorAnimation = document.getElementsByClassName('colorAnimation');
   let obstacles = boidsController.getObstacleEntities();
+  let valenceFlag = 0;
 
   //INSERT HERE YOUR MACHINE'S IPv4 ADDRESS
   let oscPort = new osc.WebSocketPort({
@@ -21,6 +22,7 @@ export default function initSocket(boidsController, simpleRenderer) {
         //console.log('message', msg);
         lightIntensity(msg.args);
         simpleRenderer.breathe(msg.args[0]);
+        break;
       case '/COHESION':
         //console.log('COHESION', msg.args);
         changeCohesion(msg.args);
@@ -39,12 +41,19 @@ export default function initSocket(boidsController, simpleRenderer) {
         break;
       case '/VALENCE':
         //console.log('VALENCE', msg.args);
+        if (msg.args < 0) {
+          valenceFlag = 1;
+        } else {
+          valenceFlag = 0;
+        }
 
         break;
       case '/AROUSAL':
         //console.log('AROUSAL', msg.args);
-        if (msg.args < 0) {
+        if (msg.args < 0 && valenceFlag === 1) {
           increaseSadness(msg.args);
+        } else if (msg.args < 0 && valenceFlag === 0) {
+          peacefulMood(msg.args);
         } else {
           decreaseSadness(msg.args);
         }
@@ -81,6 +90,29 @@ export default function initSocket(boidsController, simpleRenderer) {
     light[1].setAttribute('animation__arousal', {
       property: 'light.intensity',
       to: 2.5,
+      dur: 1500,
+      easing: 'linear',
+    });
+  }
+
+  function peacefulMood(arousal) {
+    scene.setAttribute('animation__arousal', {
+      property: 'fog.density',
+      to: 0.02 - arousal / 7,
+      dur: 1500,
+      easing: 'linear',
+    });
+
+    light[0].setAttribute('animation__arousal', {
+      property: 'light.intensity',
+      to: 2.5 - arousal / 4,
+      dur: 1500,
+      easing: 'linear',
+    });
+
+    light[1].setAttribute('animation__arousal', {
+      property: 'light.intensity',
+      to: 0,
       dur: 1500,
       easing: 'linear',
     });
