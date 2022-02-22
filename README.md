@@ -67,7 +67,7 @@ the speed of the *Sad Area*
 
 
 
-##How to use 
+## How to use 
 
 ### Dependencies
 
