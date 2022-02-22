@@ -60,6 +60,9 @@ The boids behavior  is regulated by main parameters each linked to the norm of a
 **Speed**: the speed force.
 
  ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation2.gif) 
+ ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation3.gif) 
+ ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation4.gif) 
+ ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation7.gif) 
 
 
 ### Low-level features mapping
