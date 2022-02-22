@@ -43,6 +43,7 @@ A customizable preprocessing chain is implemented exploiting the PedalBoard pyth
 
 ## Valence and Arousal Russell Plane
 ## Color Mapping
+ ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Color%20Mapping.png) 
 
 
 ## Environment
