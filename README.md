@@ -59,6 +59,9 @@ The boids behavior  is regulated by main parameters each linked to the norm of a
 **Cohesion**: A force pointing toward the center of the neighbors, allows the creation of groups of swarms.
 **Speed**: the speed force.
 
+ ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation2.gif) 
+
+
 ### Low-level features mapping
 In order to make more dynamic and creative the boid's behaviour just described we 
 chose to exploit some low level features extracted from the audio.
