@@ -17,6 +17,8 @@ Starting from a musical piece, a music emotion recognition model extracts these 
 
 ## Neural Network
 
+![alt text](https://github.com/EllDy96/3Dreams/tree/main//Neural Network.png?raw=true)
+
 ### Training
 The training is based on the MediaEval Dataset, that contains the arousal and valence values of 1000 songs of different genres.
 
