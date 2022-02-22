@@ -88,8 +88,11 @@ code blocks for commands
 ## Authors
 
 Francesco Boarino
+
 Davide Lionetti
+
 Giovanni Affatato
+
 Alessandro Molteni
 
 
