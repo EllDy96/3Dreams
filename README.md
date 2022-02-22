@@ -15,14 +15,22 @@ Starting from a musical piece, a music emotion recognition model extracts these 
 
 3Dreams is designed so that the user can feed it with every song he wants, and its emotional trajectory will be extracted and displayed in the virtual world, which can be accessed by many users at the same time.
 
+
+## System Architecture
+
+ ![alt text](https://raw.githubusercontent.com/EllDy96/3Dreams/tree/main/images/architecture.png) 
+
+The general structure of the project is divided into two stages: analysis and visualization. Song’s high and low-level features are extracted using python and then sent via OSC to a web server. 
+The web server hosts the virtual world, so that the user can access it from any device by connecting using a browser. It also forwards the received OSC messages to the clients via a WebSocket interface, in order to synchronize the world with the evolution of the music.
+
 ## Neural Network
 
-![alt text](https://github.com/EllDy96/3Dreams/tree/main//Neural Network.png?raw=true)
 
 ### Training
 The training is based on the MediaEval Dataset, that contains the arousal and valence values of 1000 songs of different genres.
 
 ### Layers Structure
+
 The architecture involves two convolutional layers with different kernel size: one is dedicated to observe the phase variatons within a frame, and the other one (with bigger kernel size) to capture patterns and periodic behaviour.
 The combination of these two layers go through a Time distributed fully connected layer,
 that combined with a bidirectional GRU learn the temporal information. 
@@ -61,10 +69,6 @@ In particular we focused on:
 - **SPECTRAL-ENTROPY**, that influences the alignment value of the *Tension Area* and 
 the speed of the *Sad Area*
 - **ZERO-CROSSING-RATE** , that modifies the cohesion value of the *Tension Area*
-
-
-
-
 
 
 
