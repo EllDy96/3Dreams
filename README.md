@@ -18,7 +18,7 @@ Starting from a musical piece, a music emotion recognition model extracts these 
 
 ## System Architecture
 
- ![alt text](https://raw.githubusercontent.com/EllDy96/3Dreams/tree/main/images/architecture.png) 
+ ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/architecture.png) 
 
 The general structure of the project is divided into two stages: analysis and visualization. Song’s high and low-level features are extracted using python and then sent via OSC to a web server. 
 The web server hosts the virtual world, so that the user can access it from any device by connecting using a browser. It also forwards the received OSC messages to the clients via a WebSocket interface, in order to synchronize the world with the evolution of the music.
