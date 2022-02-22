@@ -32,3 +32,77 @@ At the end a Dense Layer is placed to match the desire shape of the output.
 A customizable preprocessing chain is implemented exploiting the PedalBoard python library in order to provide to the users, depending on the input audio, to make more robust the model and to tune the value ranges of the low level features.
 
 ## Valence and Arousal Russell Plane
+
+
+##Color Mapping
+
+
+##Environment
+###Framework
+
+##Boids Behaviour  
+
+###Main Behaviour
+
+The boids behavior  is regulated by main parameters each linked to the norm of a specific force vector applied to each: 
+**Alignment**: the steering force inducing to follow the same direction of the neighbor’s boids.
+**Separation**: repulsion force to prevent collision and to define how much space is in between. 
+**Cohesion**: A force pointing toward the center of the neighbors, allows the creation of groups of swarms.
+**Speed**: the speed force.
+
+###Low-level features mapping
+In order to make more dynamic and creative the boid's behaviour just described we 
+chose to exploit some low level features extracted from the audio.
+These features are mapped to some of the boid's behaviour parameters and modify them
+in a certain range.
+In particular we focused on:
+-**SPECTRAL FLUX**, that affects the separation in the boid system of the *Happy Area*
+-**ENERGY**, mapped to the speed of the *Peacful* and Happy *Area*
+-**SPECTRAL-ENTROPY**, that influences the alignment value of the *Tension Area* and 
+the speed of the *Sad Area*
+-**ZERO-CROSSING-RATE**, that modifies the cohesion value of the *Tension Area*
+
+
+
+
+
+
+
+
+##How to use 
+
+### Dependencies
+
+* ............
+
+### Installing
+
+* ................
+
+### Executing program
+
+* How to run the program
+
+```
+code blocks for commands
+```
+
+## Authors
+
+Francesco Boarino
+Davide Lionetti
+Giovanni Affatato
+Alessandro Molteni
+
+
+
+## References
+
+Inspiration, code snippets, etc.
+* [Festivalle21](https://github.com/ammlyy/festivalle21)
+* [MedievalDataset](http://www.multimediaeval.org/datasets/)
+* [boids-webworkers](????)
+
+* M. Schindler and J. W. Goethe, Goethe’s theory of colour. London: New Knowledge, 1970.​
+* J. Itten, The Art of Color: The Subjective Experience and Objective Rationale of Color. Van Nostrand Reinhold Company, 1974.
+
