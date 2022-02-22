@@ -11,7 +11,7 @@ that a musical event generates, and **Arousal**, defined as the level of
 autonomic activation that a musical event creates.
 Starting from a musical piece, a music emotion recognition model extracts these features every 500 ms and after a normalization and avaraging process of the values, they're mapped in to the correspondent color, associated to a certain emotion.
 
-**The user can listen to all the music you want with whoever you want, but in a different place!**
+**The user can listen to all the music he wants with whoever he wants, but in a different place!**
 
 3Dreams is designed so that the user can feed it with every song he wants, and its emotional trajectory will be extracted and displayed in the virtual world, which can be accessed by many users at the same time.
 
