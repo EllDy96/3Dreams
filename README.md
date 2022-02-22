@@ -101,7 +101,6 @@ Alessandro Molteni
 
 * [Festivalle21](https://github.com/ammlyy/festivalle21)
 * [MedievalDataset](http://www.multimediaeval.org/datasets/)
-* [boids-webworkers](????)
-
+* [boids-webworkers](https://github.com/ercang/boids-js)
 * M. Schindler and J. W. Goethe, Goethe’s theory of colour. London: New Knowledge, 1970.​
 * J. Itten, The Art of Color: The Subjective Experience and Objective Rationale of Color. Van Nostrand Reinhold Company, 1974.
