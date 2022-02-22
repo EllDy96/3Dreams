@@ -49,7 +49,19 @@ A customizable preprocessing chain is implemented exploiting the PedalBoard pyth
 ## Environment
 ### Framework
 
-## Boids Behaviour  
+### Lights
+![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/secondary.png) 
+
+
+### Terrain
+![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation%20terrain.gif) 
+
+
+## Boids System
+
+### Obstacles
+![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Obstacles.gif) 
+
 
 ### Main Behaviour
 
