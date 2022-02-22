@@ -60,7 +60,7 @@ In particular we focused on:
 -**ENERGY**, mapped to the speed of the *Peacful* and Happy *Area*
 -**SPECTRAL-ENTROPY**, that influences the alignment value of the *Tension Area* and 
 the speed of the *Sad Area*
--**ZERO-CROSSING-RATE**, that modifies the cohesion value of the *Tension Area*
+-**ZERO-CROSSING-RATE**, that modifies the cohesion value of the *Tension Area*.
 
 
 
@@ -68,9 +68,7 @@ the speed of the *Sad Area*
 
 
 
-
-##How to use 
-
+##How to use
 ### Dependencies
 
 * ............
