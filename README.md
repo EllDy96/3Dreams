@@ -20,7 +20,7 @@
 ## Introduction
 
 The purpose of the appication is to enhance the music listening experience by immersing the user in a dreamlike environment where music emotion is not only conveyed through sound, but also through sight.
-The song's mood mdifies the colours and shapes of the virtual 3D world in which the user is immerse through the use of a VR Headset.
+The song's emotional contour modifies the colours and shapes of the virtual 3D world in which the user is immerse through the use of a VR Headset.
 In order to extract the mood of a musical piece  two high level features are exploited: **Valence**, refered to the level of pleasantness
 that a musical event generates, and **Arousal**, defined as the level of 
 autonomic activation that a musical event creates.
