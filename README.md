@@ -44,8 +44,23 @@ At the end a Dense Layer is placed to match the desire shape of the output.
 A customizable preprocessing chain is implemented exploiting the PedalBoard python library in order to provide to the users, depending on the input audio, to make more robust the model and to tune the value ranges of the low level features.
 
 ## Valence and Arousal Russell Plane
+### Music emotion recogniction
+For the music emotion recognition strategy, we used a conceptualization approach called the Dimensional model: it aims to define emotions based on a continuum descriptors domain.  Emotions cannot be divided into discrete and independent categories, all the affective states arrive from common, overlapping neurophysiological systems. We decided to use the model developed by psychologist James Russell called the circumplex model of emotion. Russell proposes that each emotional state can be modeled as a linear combination of two fundamental neurophysiological systems related to: 
+1.	Valence: high level of valence is linked with high pleasantness, on the other hand, a low level of Valence is associated with displeasure.
+2.	Arousal or alertness: it expresses the level of emotional activation; it ranges from calm (low) to excited (high).
+
+Joy, for example, is conceptualized as the product of strong activation in the neural systems associated with positive valence or pleasure, together with moderate activation in the neural systems associated with arousal.
+Russell creates these 2D planes to describe all the possible human emotions placing the valence in the horizontal axes and the Arousal in the vertical one. By sampling this 2D plane we could retrieve all the human emotions. Rossell also designed a mapping of the Valence-Arousal space, identifying a set of human emotions as specific points of the VA space.  
+
 ## Color Mapping
- ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Color%20Mapping.png) 
+ ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/ColorMapping1.png) 
+The adoption of Russell’s model made it necessary to create an appropriate colors plan that reﬂects the correspondence between points in the VA plane and the color-emotion theory.
+We implement our color space by identifying one suitable starting color, one for each of the 4 quadrants, based on the fusion of two color-emotion theories by Ryber’s [5] and by Goethe’s one [4]. 
+
+According to Ryberg’s theory, red represents the most powerful and energetic color, while blue represents emotions with less energy. Goethe’s theory, instead, considers the negative colors as blue and red-blue, and the positive colors as yellow, red-yellow. In the resulting model, we associated the first quadrant with yellow the second with green, the third with blue, and the fourth with red.
+
+The colors that are most powerful, red-like as orange and coral, are placed at the higher arousal zone, while more peaceful colors, like blue and green, end up at the lower arousal zone.
+Associating each VA-points with this color plan we can map all the different emotions melting these 4 basic colors together. They are smoothed into one another to avoid sharp boundaries and they get weaker towards the center where arousal and valence are more neutral. 
 
 
 ## Environment
@@ -65,13 +80,19 @@ A customizable preprocessing chain is implemented exploiting the PedalBoard pyth
 ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Obstacles.gif) 
 
 
-### Main Behaviour
+### Boids Main Behaviour mapping
 
-The boids behavior  is regulated by main parameters each linked to the norm of a specific force vector applied to each: 
-**Alignment**: the steering force inducing to follow the same direction of the neighbor’s boids.
-**Separation**: repulsion force to prevent collision and to define how much space is in between. 
-**Cohesion**: A force pointing toward the center of the neighbors, allows the creation of groups of swarms.
-**Speed**: the speed force.
+We can model the Boids swarm behavior tuning fours parameters linked to the norm of 4 force vectors applied to each boid:  
+- **Alignment**: the steering force inducing to follow the same direction of the neighbor’s boids.
+- **Separation**: repulsion force to prevent collision and to define how much space is in between. 
+- **Cohesion**: A force pointing toward the center of the neighbors, allows the creation of groups of swarms.
+- **Speed**: the speed force.
+
+We update these parameters to make the swarm reflects the emotional contour of the playback track in real-time using OSC messages. 
+To design a meaningful mapping, we want to establish some dependency on the current VA-space’s point where the song is, to have an overall effective swarm behavior.
+### VA-Space clustering 
+We split the VA-space into 5 clusters each associated with a specific emotion, to each cluster we designed a specific boids behavior that best describes the respecting emotion, by fixing 2 or more of the 4 Boid parameters. Inside each cluster, we introduce some novelty situations by tuning in real-time the remaining Boid’s parameters with specific instantaneous low-level features.
+
 
  ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation2.gif) 
  ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation3.gif) 
