@@ -14,7 +14,7 @@
 * The application runs on a web server. To set up the server find the IP address of your machine and paste it as suggested by the comments in the files server.js and web/socket.js  (NOTE: the server and all the clients must be connected to the same private network, i.e. the same WiFi, hotspot and so on)
 * Run `npm start` to start the server
 * Connect using Chrome to `https://x.x.x.x:3000/` where `x.x.x.x` is the IP address (NOTE: is important to use https protocol in order to access the smartphone's sensors for virtual reality mode. Chrome might also notify the connection as unsafe because we created the certificates by ourselves)
-* Run **py/MusicEmotionMapping/mer_3dreams.py**
+* Go into **py/MusicEmotionMapping/mer_3dreams.py**, paste your own file audio path on the variable "audio_path" at the end of the script an then run it. Enjoy a visual immersive rappresentation of your song! 
 
 
 ## Introduction
