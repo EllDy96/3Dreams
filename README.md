@@ -140,14 +140,14 @@ the speed of the *Sad Area*
 
 * Clone the repository and run `npm install`. 
 * Run `npm install` also in the **web** directory.
-* Install all the depedencies required by the python script
+* Install all the depedencies required by the python script **py/MusicEmotionMapping/mer_3dreams.py** using `pip install`
 
 ### Executing program
 
 * The application runs on a web server. To set up the server find the IP address of your machine and paste it as suggested by the comments in the files server.js and web/socket.js  (NOTE: the server and all the clients must be connected to the same private network, i.e. the same WiFi, hotspot and so on)
 * Run `npm start` to start the server
 * Connect using Chrome to `https://x.x.x.x:3000/` where `x.x.x.x` is the IP address (NOTE: is important to use https protocol in order to access the smartphone's sensors for virtual reality mode. Chrome might also notify the connection as unsafe because we created the certificates by ourselves)
-* Start the python script
+* Run **py/MusicEmotionMapping/mer_3dreams.py**
 
 ## Authors
 
