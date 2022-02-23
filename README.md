@@ -56,7 +56,7 @@ both in future and past direction (optimal for a musical context).
 At the end a Dense Layer is placed to match the desire shape of the output.
 
 ## Audio Pre-Processing
-A customizable preprocessing chain is implemented exploiting the PedalBoard python library in order to provide to the users, depending on the input audio, to make more robust the model and to tune the value ranges of the low level features.
+A customizable preprocessing chain is implemented exploiting the PedalBoard python library in order to provide to the users the possibility to apply some filters to the original audio track before the Music emotion mapping. Reducing the dynamic of a extremely loud and compressed audio file applying a Gain(gain_db=-12) in the pre processing stage, allows the model to extract the Valence and Arousal in a much accurrate way, ensuring the best perfermance.
 
 ## Valence and Arousal Russell Plane
 ### Music emotion recogniction
