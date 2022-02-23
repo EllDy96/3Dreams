@@ -86,7 +86,7 @@ These features are mapped to some of the boid's behaviour parameters and modify 
 in a certain range.
 In particular we focused on:
 - **SPECTRAL FLUX**, that affects the separation in the boid system of the *Happy Area*
-- **ENERGY**, mapped to the speed of the *Peacful* and Happy *Area*
+- **ENERGY**, it modifies the speed of the *Peacful* and Happy *Area* 
 - **SPECTRAL-ENTROPY**, that influences the alignment value of the *Tension Area* and 
 the speed of the *Sad Area*
 - **ZERO-CROSSING-RATE** , that modifies the cohesion value of the *Tension Area*
