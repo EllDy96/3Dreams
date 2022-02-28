@@ -131,7 +131,9 @@ We split the VA-space into 5 clusters each associated with a specific emotion, t
 
  ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation2.gif) 
  
- - **The peaceful cluster**, associated with the green part, has maximum cohesion and minimum separation to create multiple compact swarms that fluctuate in a chilly way.  
+ - **The peaceful cluster**, associated with the green part, has maximum cohesion and minimum separation to create multiple compact swarms that fluctuate in a chilly way.
+ 
+ ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/PeacefulBoids.gif)
 
 
 ### Low-level features mapping
