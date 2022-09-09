@@ -25,7 +25,7 @@ The song's emotional contour tunes the colours and the swarm behaviour of the vi
 In order to extract the mood of a musical piece  two high level features are exploited: **Valence**, refered to the level of pleasantness
 that a musical event generates, and **Arousal**, defined as the level of 
 autonomic activation that a musical event creates.
-Starting from a musical piece, a music emotion recognition model extracts these features every 500 ms and after a normalization and avaraging process of the values, they're mapped in to the correspondent color, associated to a certain emotion.
+Starting from a musical piece, a music emotion recognition model extracts these features every 500 ms and after a normalization and avaraging process of the values, they're mapped in to the correspondent color, associated to a certain emotion. If you are interested you can watch a [short demo video](https://drive.google.com/file/d/16BqqSO9iSKyAyB1cbe3xZnKxpoE9ZWbf/view).
 
 **The user can listen to all the music he wants with whoever he wants, but in a different place!**
 
