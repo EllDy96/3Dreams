@@ -17,16 +17,16 @@
 * Go into **py/MusicEmotionMapping/mer_3dreams.py**, paste your own file audio path on the variable "audio_path" at the end of the script an then run it. Enjoy a visual immersive rappresentation of your song! 
 
 
-## Introduction
+# Introduction
 
 3Dreams is a New media art application that aims to enhance the music listening experience by giving shapes and colors to the emotional contour conveyed by one music track selected by the user. it's is a VR experience that immerses the user in a dreamlike virtual 3D environment where the music emotions are reflected  in real-time through the changes of the environment.
-The song's emotional contour tunes the colours and the swarm behaviour of the virtual 3D world, in which the user is immerse through the use of a VR Headset.
+The song's emotional contour tunes the colours and the swarm behaviour of the virtual 3D world, in which the user is immerse through the use of a VR Headset. If you are interested you can watch a [short demo video](https://drive.google.com/file/d/16BqqSO9iSKyAyB1cbe3xZnKxpoE9ZWbf/view).
+
 ### Music emotion extraction
 In order to extract the mood of a musical piece  two high level features are exploited: **Valence**, refered to the level of pleasantness
 that a musical event generates, and **Arousal**, defined as the level of 
 autonomic activation that a musical event creates.
-Starting from a musical piece, a music emotion recognition model extracts these features every 500 ms and after a normalization and avaraging process of the values, they're mapped in to the correspondent color, associated to a certain emotion. If you are interested you can watch a [short demo video](https://drive.google.com/file/d/16BqqSO9iSKyAyB1cbe3xZnKxpoE9ZWbf/view).
-
+Starting from a musical piece, a music emotion recognition model extracts these features every 500 ms and after a normalization and avaraging process of the values, they're mapped in to the correspondent color, associated to a certain emotion. 
 **The user can listen to all the music he wants with whoever he wants, but in a different place!**
 
 3Dreams is designed so that the user can feed it with every song he wants, and its emotional trajectory will be extracted and displayed in the virtual world, which can be accessed by many users at the same time.
