@@ -19,7 +19,7 @@
 
 ## Introduction
 
-3Dreams is a tool that aims to enhance the music listening experience by giving shapes and colors to the emotion conveyed by the music track. it's is a VR experience that immerses the user in a dreamlike virtual 3D environment where the music emotions are reflected  in real-time through the changes of the environment.
+3Dreams is a New media art application that aims to enhance the music listening experience by giving shapes and colors to the emotional contour conveyed by one music track selected by the user. it's is a VR experience that immerses the user in a dreamlike virtual 3D environment where the music emotions are reflected  in real-time through the changes of the environment.
 The song's emotional contour tunes the colours and the swarm behaviour of the virtual 3D world, in which the user is immerse through the use of a VR Headset.
 ### Music emotion extraction
 In order to extract the mood of a musical piece  two high level features are exploited: **Valence**, refered to the level of pleasantness
