@@ -69,7 +69,8 @@ Joy, for example, is conceptualized as the product of strong activation in the n
 Russell creates these 2D planes to describe all the possible human emotions placing the valence in the horizontal axes and the Arousal in the vertical one. By sampling this 2D plane we could retrieve all the human emotions. Rossell also designed a mapping of the Valence-Arousal space, identifying a set of human emotions as specific points of the VA space.  
 
 ## Color Mapping
- ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/ColorMapping1.png) 
+![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/ColorMapping1.png) 
+
 The adoption of Russell’s model made it necessary to create an appropriate colors plan that reﬂects the correspondence between points in the VA plane and the color-emotion theory.
 We implement our color space by identifying one suitable starting color, one for each of the 4 quadrants, based on the fusion of two color-emotion theories by Ryber’s [5] and by Goethe’s one [4]. 
 
