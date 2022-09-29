@@ -80,8 +80,9 @@ The colors that are most powerful, red-like as orange and coral, are placed at t
 Associating each VA-points with this color plan we can map all the different emotions melting these 4 basic colors together. They are smoothed into one another to avoid sharp boundaries and they get weaker towards the center where arousal and valence are more neutral. 
 
 
-## Environment
+## VR Environment
 ### Framework
+For the development of the Virtual reality environment we use Aframe: an open-source web framework for building virtual reality (VR) web experiences.
 
 ### Lights
 ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/secondary.png) 
