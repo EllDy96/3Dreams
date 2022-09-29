@@ -114,7 +114,7 @@ To design a meaningful mapping, we want to establish some dependency on the curr
 We split the VA-space into 5 clusters each associated with a specific emotion, to each cluster we designed a specific boids behavior that best describes the respecting emotion, by fixing 2 or more of the 4 Boid parameters. Inside each cluster, we introduce some novelty situations by tuning in real-time the remaining Boid’s parameters with specific instantaneous low-level features.
 
 
- 
+.
 
  
  -	**Happy cluster**, associated with the yellow parts, has maximum alignment and cohesion to create one single swarm that fluctuates around in a harmonic dance. 
@@ -125,7 +125,7 @@ We split the VA-space into 5 clusters each associated with a specific emotion, t
  
  ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation3.gif) 
  
- - **Fear** cluster, associated with the red part, has maximum alignment but minimum cohesion, in this way each Boid tries to follow the neighbour’s direction but without creating any swarm for the low 
+ - **Fear** cluster, associated with the red part, has maximum alignment but minimum cohesion, in this way each Boid tries to follow the neighbour’s direction but without creating any swarm creating a frightened and scattered flock.
  ![alt text](https://github.com/EllDy96/3Dreams/blob/main/images/Animation7.gif) 
  
  - **Sad cluster**, associated with the blue part, has maximum cohesion, minimum separation, and alignment. In this area, the boids barely move, they are split into little depressed still groups that do not move for the low alignment and the high cohesion. 
